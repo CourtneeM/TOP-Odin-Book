@@ -6,7 +6,7 @@ const CommentSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   timestamp: { type: String, default: new Date(), required: true },
   likes: { type: Array, default: [], required: true },
-  post_id: { type: String, required: true }
+  post_id: { type: Schema.Types.ObjectId, ref: "Post", required: true }
 });
 
 CommentSchema.virtual("url").get(function() {
