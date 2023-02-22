@@ -4,23 +4,23 @@ const async = require('async');
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
+const Comment = require('../models/Comment');
+
 exports.comments_get = (req, res) => {
-  res.json('get comments');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
+  Comment.find()
+    .exec((err, comments) => {
+      if (err) return err;
       
-  //     res.send(users);
-  //   });
+      res.json(comments);
+    });
 }
 exports.comment_get = (req, res) => {
-  res.json('get comment');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
+  Comment.find({ _id: req.params.commentId })
+    .exec((err, comment) => {
+      if (err) return err;
       
-  //     res.send(users);
-  //   });
+      res.json(comment);
+    });
 }
 exports.create_comment_post = (req, res) => {
   res.json('create comment post');

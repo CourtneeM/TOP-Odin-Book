@@ -4,23 +4,23 @@ const async = require('async');
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
+const Post = require('../models/Post');
+
 exports.posts_get = (req, res) => {
-  res.json('get posts');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
+  Post.find()
+    .exec((err, posts) => {
+      if (err) return err;
       
-  //     res.send(users);
-  //   });
+      res.json(posts);
+    });
 }
 exports.post_get = (req, res) => {
-  res.json('get post');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
+  Post.find({ _id: req.params.postId })
+    .exec((err, post) => {
+      if (err) return err;
       
-  //     res.send(users);
-  //   });
+      res.json(post);
+    });
 }
 exports.create_post_post = (req, res) => {
   res.json('create post post');
