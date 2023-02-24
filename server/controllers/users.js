@@ -9,33 +9,28 @@ const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 
 exports.logged_in_user_get = (req, res) => {
-  res.json('get logged in user');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
-      
-  //     res.send(users);
-  //   });
+  return res.json(req.user);
 }
 
 exports.log_in_post = (req, res) => {
-  res.json('post log in');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
-      
-  //     res.send(users);
-  //   });
+  passport.authenticate("local", (err, user, info) => {
+    if (err) throw err;
+    if (!user) {
+      res.json("No user exists");
+    } else {
+      req.logIn(user, err => {
+        if (err) throw err;
+        res.json('Successfully authenticated');
+      })
+    }
+  })(req, res, next);
 }
 
 exports.log_out_post = (req, res) => {
-  res.json('post log out');
-  // User.find({ is_admin: false })
-  //   .exec((err, users) => {
-  //     if (err) return err;
-      
-  //     res.send(users);
-  //   });
+  req.logout((err) => {
+    if (err) return err;
+    res.redirect("/");
+  });
 }
 
 exports.users_get = (req, res) => {

@@ -29,6 +29,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./passportConfig')(passport);
 
+// Access the user object from anywhere in our application
+// using locals.currentUser
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 const indexRouter = require('./routes/index');
 app.use('/api', indexRouter);
 

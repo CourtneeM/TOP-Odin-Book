@@ -27,11 +27,11 @@ router.post('/posts/:postId/edit', posts_controller.edit_post_post);
 router.post('/posts/:postId/delete', posts_controller.delete_post_post);
 
 /* COMMENT */
-router.get('/comments', comments_controller.comments_get);
-router.get('/comments/:commentId', comments_controller.comment_get);
+router.get('/posts/:postId/comments', comments_controller.comments_get);
+router.get('/posts/:postId/comments/:commentId', comments_controller.comment_get);
 
-router.post('/comments/create', comments_controller.create_comment_post);
-router.post('/comments/:commentId/edit', comments_controller.edit_comment_post);
-router.post('/comments/:commentId/delete', comments_controller.delete_comment_post);
+router.post('/posts/:postId/comments/create', comments_controller.create_comment_post);
+router.post('/posts/:postId/comments/:commentId/edit', comments_controller.edit_comment_post);
+router.post('/posts/:postId/comments/:commentId/delete', comments_controller.delete_comment_post);
 
 module.exports = router;

@@ -1,6 +1,3 @@
-const passport = require('passport');
-const bcrypt = require('bcrypt');
-const async = require('async');
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
@@ -8,6 +5,7 @@ const Post = require('../models/Post');
 
 exports.posts_get = (req, res) => {
   Post.find()
+    .populate('author')
     .exec((err, posts) => {
       if (err) return err;
       
@@ -16,6 +14,7 @@ exports.posts_get = (req, res) => {
 }
 exports.post_get = (req, res) => {
   Post.find({ _id: req.params.postId })
+    .populate('author')
     .exec((err, post) => {
       if (err) return err;
       

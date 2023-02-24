@@ -1,13 +1,11 @@
-const passport = require('passport');
-const bcrypt = require('bcrypt');
-const async = require('async');
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
 const Comment = require('../models/Comment');
 
 exports.comments_get = (req, res) => {
-  Comment.find()
+  Comment.find({ post_id: req.params.postId }) 
+    .populate('author')
     .exec((err, comments) => {
       if (err) return err;
       
@@ -16,6 +14,7 @@ exports.comments_get = (req, res) => {
 }
 exports.comment_get = (req, res) => {
   Comment.find({ _id: req.params.commentId })
+    .populate('author')
     .exec((err, comment) => {
       if (err) return err;
       
@@ -47,7 +46,7 @@ exports.create_comment_post = [
       const comment = new Comment({
         message: req.body.message,
         author: req.body.author, // res.locals.currentUser._id,
-        post_id: req.body.post_id
+        post_id: req.params.postId || req.body.post_id
       });
 
       if (!errors.isEmpty()) {
@@ -106,7 +105,7 @@ exports.edit_comment_post = [
       author: req.body.author._id,
       timestamp: req.body.timestamp,
       _id: req.params.commentId, //This is required, or a new ID will be assigned!
-      post_id: req.body.post_id
+      post_id: req.params.postId || req.body.post_id
     });
 
     if (!errors.isEmpty()) {
