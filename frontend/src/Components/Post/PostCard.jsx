@@ -7,20 +7,20 @@ import CommentCard from '../Comment/CommentCard';
 function PostCard({ post }) {
   const [comments, setComments] = useState(null);
   const [commentsPreview, setCommentsPreview] = useState(true);
-  const [numCommentsToLoad, setNumCommentsToLoad] = useState(3);
+  const [numCommentsToLoad, setNumCommentsToLoad] = useState(2);
 
   useEffect(() => {
     getComments(post._id).then((res) => {
-      setComments(res);
+      setComments(res.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()));
     });
   }, [post]);
 
   const loadMoreComments = () => {
-    setNumCommentsToLoad(numCommentsToLoad + 5);
+    setNumCommentsToLoad(numCommentsToLoad + 4);
   }
 
-  const collapseComments = () => {
-    setNumCommentsToLoad(3);
+  const hideComments = () => {
+    setNumCommentsToLoad(2);
   }
 
   return (
@@ -48,12 +48,12 @@ function PostCard({ post }) {
         null
       }
       {
-        comments?.length > 3 && comments.length <= numCommentsToLoad ?
-        <button onClick={collapseComments}>Collapse Comments</button> :
+        comments?.length > 2 && comments.length <= numCommentsToLoad ?
+        <button onClick={hideComments}>Hide Comments</button> :
         null
       }
       {
-        comments?.length > 3 && comments.length > numCommentsToLoad ?
+        comments?.length > 2 && comments.length > numCommentsToLoad ?
         <button onClick={loadMoreComments}>Load More Comments</button> :
         null
       }
