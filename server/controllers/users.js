@@ -42,7 +42,7 @@ exports.users_get = (req, res) => {
     });
 }
 exports.user_get = (req, res) => {
-  User.find({ _id: req.params.userId })
+  User.findOne({ _id: req.params.userId })
     .exec((err, user) => {
       if (err) return err;
       
@@ -50,7 +50,7 @@ exports.user_get = (req, res) => {
     });
 }
 exports.user_content_get = (req, res) => {
-  User.find({ _id: req.params.userId })
+  User.findOne({ _id: req.params.userId })
     .exec((err, user) => {
       if (err) return err;
 
@@ -163,11 +163,11 @@ exports.create_user_post = [
 ]
 exports.edit_user_post = [
   // Validate and sanitize fields.
-  body("firstName", "First name must not be empty.")
+  body("first_name", "First name must not be empty.")
   .trim()
   .isLength({ min: 1 })
   .escape(),
-  body("lastName", "Last name must not be empty.")
+  body("last_name", "Last name must not be empty.")
   .trim()
   .isLength({ min: 1 })
   .escape(),
@@ -238,6 +238,9 @@ exports.edit_user_post = [
         last_name: req.body.lastName,
         email: req.body.email,
         password: hashedPassword,
+        friends: req.body.friends,
+        friend_requests: req.body.friend_requests,
+        profile_picture: req.body.profile_picture,
         _id: req.params.userId || req.body.userId, //This is required, or a new ID will be assigned!
       });
     } else {
@@ -245,6 +248,9 @@ exports.edit_user_post = [
         first_name: req.body.firstName,
         last_name: req.body.lastName,
         email: req.body.email,
+        friends: req.body.friends,
+        friend_requests: req.body.friend_requests,
+        profile_picture: req.body.profile_picture,
         _id: req.params.userId || req.body.userId, //This is required, or a new ID will be assigned!
       });
     }

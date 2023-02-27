@@ -10,7 +10,7 @@ function PostIndex() {
     lastName: '',
     email: '',
     id: '',
-    friends: [''],
+    friends: [],
     friendRequests: {sent: [], received: []}
   }
 
@@ -18,7 +18,6 @@ function PostIndex() {
   
   useEffect(() => {
     getPosts().then((res) => {
-      // const ownPosts = res.filter((post) => post.author._id === currentUser.id);
       const filteredPosts = res.filter((post) => {
         if (post.author._id === currentUser.id) return true;
 
