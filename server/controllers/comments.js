@@ -40,7 +40,6 @@ exports.create_comment_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    console.log(req.body);
     try {
       // Create a Comment object.
       const comment = new Comment({

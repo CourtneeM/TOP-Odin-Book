@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getUsers, getPost, editPost, getComments } from '../../api';
+import { getUsers, getPost, editPost, getComments, createComment } from '../../api';
 
 import CommentCard from '../Comment/CommentCard';
 
@@ -10,6 +10,7 @@ function PostCard({ post, currentUser }) {
   const [commentsPreview, setCommentsPreview] = useState(true);
   const [numCommentsToLoad, setNumCommentsToLoad] = useState(2);
   const [users, setUsers] = useState(null);
+  const [newCommentMessage, setNewCommentMessage] = useState('');
 
   const params = useParams();
 
@@ -33,8 +34,30 @@ function PostCard({ post, currentUser }) {
     params.userId ? setCommentsPreview(false) : setCommentsPreview(true);
   }, [params.userId]);
 
+  const handleSubmitComment = async () => {
+    if (newCommentMessage === '') return;
+
+    const newComment = {
+      message: newCommentMessage,
+      author: currentUser.id,
+      post_id: post._id
+    }
+
+    await createComment(newComment);
+
+    setNewCommentMessage('');
+    toggleDisplayNewCommentForm();
+    refreshPost();
+  }
+
   const loadMoreComments = () => setNumCommentsToLoad(numCommentsToLoad + 4);
   const hideComments = () => setNumCommentsToLoad(2);
+
+  const refreshPost = () => {
+    getPost(post._id).then((res) => {
+      setSelectedPost(res);
+    });
+  }
 
   const toggleLike = async () => {
     const postCopy = Object.assign({}, post);
@@ -46,17 +69,22 @@ function PostCard({ post, currentUser }) {
     await editPost(postCopy);
     refreshPost();
   }
-
-  const refreshPost = () => {
-    getPost(post._id).then((res) => {
-      setSelectedPost(res);
-    });
-  }
-
   const toggleDisplayWhoLikes = () => {
-    const displayWhoLikesContainer = document.querySelector(`#display-who-likes-${post._id}-container`);
+    const displayWhoLikesContainer = document.querySelector(`#who-likes-${post._id}-container`);
     
     displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
+  }
+  const toggleDisplayNewCommentForm = () => {
+    const displayNewCommentContainer = document.querySelector(`#new-comment-container-${post._id}`);
+    const addCommentBtn = document.querySelector(`#add-comment-btn-${post._id}`);
+    
+    if (displayNewCommentContainer.style.display === 'none') {
+      displayNewCommentContainer.style.display = 'block'
+      addCommentBtn.style.display = 'none';
+    } else {
+      displayNewCommentContainer.style.display = 'none'
+      addCommentBtn.style.display = 'inline-block';
+    }
   }
 
   return (
@@ -88,7 +116,7 @@ function PostCard({ post, currentUser }) {
         <button onClick={toggleLike}>Like</button>
       }
 
-      <div id={`display-who-likes-${post._id}-container`} style={{'display': 'none'}}>
+      <div id={`who-likes-${post._id}-container`} style={{'display': 'none'}}>
         <p>Users who liked this post:</p>
         {
           users && post.likes.map((userId) => {
@@ -96,6 +124,13 @@ function PostCard({ post, currentUser }) {
             return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
           })
         }
+      </div>
+
+      <button id={`add-comment-btn-${post._id}`} onClick={toggleDisplayNewCommentForm}>Add Comment</button>
+      <div id={`new-comment-container-${post._id}`} style={{'display': 'none'}}>
+        <textarea placeholder="Share your thoughts..." value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea>
+        <button onClick={handleSubmitComment}>Submit</button>
+        <button onClick={toggleDisplayNewCommentForm}>Cancel</button>
       </div>
 
       {
