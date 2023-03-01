@@ -1,7 +1,17 @@
+import { Link, useParams } from 'react-router-dom';
+
 function CommentCard({ comment }) {
+  const params = useParams();
+
   return (
     <div>
-      <p>{comment.author.first_name} {comment.author.last_name}</p>
+      {
+        params.userId ?
+        <p>{comment.author.first_name} {comment.author.last_name}</p> :
+        <Link to={`/users/${comment.author._id}`}>
+          <p>{comment.author.first_name} {comment.author.last_name}</p>
+        </Link>
+      }
       <p>{comment.timestamp}</p>
       <p>{comment.message}</p>
       {

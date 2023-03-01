@@ -41,7 +41,6 @@ const getUserContent = async (userId) => {
   const response = await fetch(`http://localhost:8080/api/users/${userId}/content`);
   const data = await response.json();
 
-  console.log(data);
   return data;
 }
 
@@ -77,6 +76,36 @@ const getPosts = async () => {
   return data;
 }
 
+const getPost = async (postId) => {
+  const response = await fetch(`http://localhost:8080/api/posts/${postId}`);
+  const data = await response.json();
+
+  return data;
+}
+
+const editPost = async (post) => {
+  await fetch(`http://localhost:8080/api/posts/${post._id}/edit`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      message: post.message,
+      author: post.author._id,
+      timestamp: post.timestamp,
+      likes: post.likes,
+      _id: post._id      
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+     console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  })
+}
+
 // COMMENT
 const getComments = async (postId) => {
   const response = await fetch(`http://localhost:8080/api/posts/${postId}/comments`);
@@ -86,5 +115,5 @@ const getComments = async (postId) => {
 }
 
 export { getUsers, getUser, getUserContent, editUser }
-export { getPosts }
+export { getPosts, getPost, editPost }
 export { getComments }

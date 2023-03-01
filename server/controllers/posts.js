@@ -13,7 +13,7 @@ exports.posts_get = (req, res) => {
     });
 }
 exports.post_get = (req, res) => {
-  Post.find({ _id: req.params.postId })
+  Post.findOne({ _id: req.params.postId })
     .populate('author')
     .exec((err, post) => {
       if (err) return err;
@@ -79,6 +79,7 @@ exports.edit_post_post = [
       message: req.body.message,
       author: req.body.author._id,
       timestamp: req.body.timestamp,
+      likes: req.body.likes,
       _id: req.params.postId || req.body.postId, //This is required, or a new ID will be assigned!
     });
 

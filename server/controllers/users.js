@@ -55,10 +55,12 @@ exports.user_content_get = (req, res) => {
       if (err) return err;
 
       Post.find({ author: user })
+        .populate('author')
         .exec((err, posts) => {
           if (err) return err;
 
           Comment.find({ author: user })
+          .populate('author')
           .exec((err, comments) => {
               if (err) return err;
     

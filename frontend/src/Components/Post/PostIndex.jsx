@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
-import { getPosts } from '../../api';
+import { getUser, getPosts } from '../../api';
 
 import Navbar from '../Navbar';
 import PostCard from './PostCard';
 
 function PostIndex() {
-  const currentUser = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    id: '',
-    friends: [],
-    friendRequests: {sent: [], received: []}
-  }
-
+  const [currentUser, setCurrentUser] = useState(null);
   const [posts, setPosts] = useState(null);
   
+  useEffect(() => {
+    getUser('63f68657c466418bff0c2d9d').then((res) => {
+      setCurrentUser(res);
+    });
+  }, [])
+
   useEffect(() => {
     getPosts().then((res) => {
       const filteredPosts = res.filter((post) => {
@@ -28,7 +26,7 @@ function PostIndex() {
 
       setPosts(filteredPosts);
     });
-  }, []);
+  }, [currentUser]);
 
   return (
     <div>
@@ -40,7 +38,7 @@ function PostIndex() {
         {
           posts ?
             posts?.length > 0 ?
-            posts.map((post) => <PostCard post={post} />) :
+            posts.map((post) => <PostCard post={post} currentUser={currentUser} />) :
             null :
           <p>No Posts to Display</p>
         }
