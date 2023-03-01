@@ -19,7 +19,6 @@ function UserProfile() {
     refreshUsers();
 
     getUserContent(params.userId).then((res) => {
-      console.log(res);
       setUserPosts(res.posts);
       setUserComments(res.comments);
     });
@@ -47,7 +46,7 @@ function UserProfile() {
                 <h2>Posts</h2>
                 {
                   userPosts && userPosts.length > 0 ?
-                  userPosts.map((post) => <PostCard post={post} />) :
+                  userPosts.map((post) => <PostCard post={post} currentUser={currentUser} />) :
                   <p>No Posts</p>
                 }
               </section>
@@ -55,7 +54,7 @@ function UserProfile() {
                 <h2>Comments</h2>
                 {
                   userComments && userComments.length > 0 ?
-                  userComments.map((comment) => <CommentCard comment={comment} />) :
+                  userComments.map((comment) => <CommentCard comment={comment} currentUser={currentUser} />) :
                   <p>No Comments</p>
                 }
               </section>

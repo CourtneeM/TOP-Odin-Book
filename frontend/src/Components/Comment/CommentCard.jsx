@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { getComment, editComment } from '../../api';
+import { getUsers, getComment, editComment } from '../../api';
 
 function CommentCard({ comment, currentUser }) {
   const [selectedComment, setSelectedComment] = useState(null);
+  const [users, setUsers] = useState(null);
+
   const params = useParams();
 
   useEffect(() => {
     setSelectedComment(comment);
   }, [comment]);
+
+  useEffect(() => {
+    getUsers().then((res) => {
+      setUsers(res);
+    });
+  }, []);
 
   const toggleLike = async () => {
     const commentCopy = Object.assign({}, comment);
@@ -28,6 +36,12 @@ function CommentCard({ comment, currentUser }) {
     });
   }
 
+  const toggleDisplayWhoLikes = () => {
+    const displayWhoLikesContainer = document.querySelector(`#display-who-likes-${comment._id}-container`);
+    
+    displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
+  }
+
   return (
     <div>
       {
@@ -41,8 +55,8 @@ function CommentCard({ comment, currentUser }) {
       <p>{comment.message}</p>
       {
         comment.likes.length === 0 || comment.likes.length > 1 ?
-        <p>{comment.likes.length} Likes</p> :
-        <p>{comment.likes.length} Like</p>
+        <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Likes</p> :
+        <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Like</p>
       }
 
       {
@@ -50,6 +64,16 @@ function CommentCard({ comment, currentUser }) {
         <button onClick={toggleLike}>Unlike</button> :
         <button onClick={toggleLike}>Like</button>
       }
+
+      <div id={`display-who-likes-${comment._id}-container`} style={{'display': 'none'}}>
+        <p>Users who liked this comment:</p>
+        {
+          users && comment.likes.map((userId) => {
+            const userList = users.filter((user) => user.id === userId)
+            return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
+          })
+        }
+      </div>
     </div>
   );
 }

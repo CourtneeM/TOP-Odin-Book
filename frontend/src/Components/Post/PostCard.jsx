@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getPost, editPost, getComments } from '../../api';
+import { getUsers, getPost, editPost, getComments } from '../../api';
 
 import CommentCard from '../Comment/CommentCard';
 
@@ -9,6 +9,7 @@ function PostCard({ post, currentUser }) {
   const [comments, setComments] = useState(null);
   const [commentsPreview, setCommentsPreview] = useState(true);
   const [numCommentsToLoad, setNumCommentsToLoad] = useState(2);
+  const [users, setUsers] = useState(null);
 
   const params = useParams();
 
@@ -23,8 +24,14 @@ function PostCard({ post, currentUser }) {
   }, [post, selectedPost]);
 
   useEffect(() => {
+    getUsers().then((res) => {
+      setUsers(res);
+    });
+  }, []);
+
+  useEffect(() => {
     params.userId ? setCommentsPreview(false) : setCommentsPreview(true);
-  }, [params.userId])
+  }, [params.userId]);
 
   const loadMoreComments = () => setNumCommentsToLoad(numCommentsToLoad + 4);
   const hideComments = () => setNumCommentsToLoad(2);
@@ -46,8 +53,14 @@ function PostCard({ post, currentUser }) {
     });
   }
 
+  const toggleDisplayWhoLikes = () => {
+    const displayWhoLikesContainer = document.querySelector(`#display-who-likes-${post._id}-container`);
+    
+    displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
+  }
+
   return (
-    <div>
+    <div className={`post-card-${post._id}`}>
       {
         params.userId ?
         <p>{post.author.first_name} {post.author.last_name}</p> :
@@ -59,8 +72,8 @@ function PostCard({ post, currentUser }) {
       <p>{post.message}</p>
       {
         post.likes.length === 0 || post.likes.length > 1 ?
-        <p>{post.likes.length} Likes</p> :
-        <p>{post.likes.length} Like</p>
+        <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Likes</p> :
+        <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Like</p>
       }
       {
         comments ?
@@ -74,6 +87,16 @@ function PostCard({ post, currentUser }) {
         <button onClick={toggleLike}>Unlike</button> :
         <button onClick={toggleLike}>Like</button>
       }
+
+      <div id={`display-who-likes-${post._id}-container`} style={{'display': 'none'}}>
+        <p>Users who liked this post:</p>
+        {
+          users && post.likes.map((userId) => {
+            const userList = users.filter((user) => user.id === userId)
+            return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
+          })
+        }
+      </div>
 
       {
         commentsPreview ?
