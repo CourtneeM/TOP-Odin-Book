@@ -104,6 +104,7 @@ exports.edit_comment_post = [
       message: req.body.message,
       author: req.body.author._id,
       timestamp: req.body.timestamp,
+      likes: req.body.likes,
       _id: req.params.commentId, //This is required, or a new ID will be assigned!
       post_id: req.params.postId || req.body.post_id
     });

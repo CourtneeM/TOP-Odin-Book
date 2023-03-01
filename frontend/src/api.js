@@ -103,7 +103,7 @@ const editPost = async (post) => {
      console.log('Success: ', data);
   }).catch((err) => {
     console.log('Error: ', err);
-  })
+  });
 }
 
 // COMMENT
@@ -114,6 +114,37 @@ const getComments = async (postId) => {
   return data;
 }
 
+const getComment = async (comment) => {
+  const response = await fetch(`http://localhost:8080/api/posts/${comment.post_id}/comments/${comment._id}`);
+  const data = await response.json();
+
+  return data;
+}
+
+const editComment = async (comment) => {
+  fetch(`http://localhost:8080/api/posts/${comment.post_id}/comments/${comment._id}/edit`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      message: comment.message,
+      author: comment.author._id,
+      timestamp: comment.timestamp,
+      likes: comment.likes,
+      _id: comment._id,
+      post_id: comment.post_id  
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+     console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  });
+}
+
 export { getUsers, getUser, getUserContent, editUser }
 export { getPosts, getPost, editPost }
-export { getComments }
+export { getComments, getComment, editComment }
