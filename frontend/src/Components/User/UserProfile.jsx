@@ -17,17 +17,20 @@ function UserProfile() {
 
   useEffect(() => {
     refreshUsers();
-
-    getUserContent(params.userId).then((res) => {
-      setUserPosts(res.posts);
-      setUserComments(res.comments);
-    });
+    refreshContent();
   }, [params.userId]);
 
   const refreshUsers = async () => {
     await getUsers().then(async (res) => {
       setCurrentUser(await res.filter((user) => user.firstName === 'Allison')[0]);
       setUser(await res.filter((user) => user.id === params.userId)[0]);
+    });
+  }
+
+  const refreshContent = () => {
+    getUserContent(params.userId).then((res) => {
+      setUserPosts(res.posts);
+      setUserComments(res.comments);
     });
   }
 
@@ -46,7 +49,7 @@ function UserProfile() {
                 <h2>Posts</h2>
                 {
                   userPosts && userPosts.length > 0 ?
-                  userPosts.map((post) => <PostCard post={post} currentUser={currentUser} />) :
+                  userPosts.map((post) => <PostCard post={post} currentUser={currentUser} refreshContent={refreshContent} />) :
                   <p>No Posts</p>
                 }
               </section>

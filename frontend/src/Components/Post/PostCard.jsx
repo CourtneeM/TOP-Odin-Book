@@ -4,7 +4,7 @@ import { getUsers, getPost, editPost, deletePost, getComments, createComment } f
 
 import CommentCard from '../Comment/CommentCard';
 
-function PostCard({ post, currentUser, refreshPosts }) {
+function PostCard({ post, currentUser, refreshContent }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [comments, setComments] = useState(null);
   const [commentsPreview, setCommentsPreview] = useState(true);
@@ -63,7 +63,7 @@ function PostCard({ post, currentUser, refreshPosts }) {
     if (currentUser.id !== post.author._id) return;
 
     await deletePost(post._id);
-    refreshPosts();
+    refreshContent();
   }
 
   const toggleLike = async () => {
