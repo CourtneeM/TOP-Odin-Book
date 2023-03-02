@@ -15,6 +15,10 @@ function PostIndex() {
   }, [])
 
   useEffect(() => {
+    refreshPosts();
+  }, [currentUser]);
+
+  const refreshPosts = () => {
     getPosts().then((res) => {
       const filteredPosts = res.filter((post) => {
         if (post.author._id === currentUser.id) return true;
@@ -24,9 +28,10 @@ function PostIndex() {
         })[0];
       });
 
+      console.log('refresh posts')
       setPosts(filteredPosts);
     });
-  }, [currentUser]);
+  }
 
   return (
     <div>
@@ -38,7 +43,7 @@ function PostIndex() {
         {
           posts ?
             posts?.length > 0 ?
-            posts.map((post) => <PostCard post={post} currentUser={currentUser} />) :
+            posts.map((post) => <PostCard post={post} currentUser={currentUser} refreshPosts={refreshPosts} />) :
             null :
           <p>No Posts to Display</p>
         }

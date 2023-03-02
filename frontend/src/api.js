@@ -106,6 +106,25 @@ const editPost = async (post) => {
   });
 }
 
+const deletePost = async (postId) => {
+  await fetch(`http://localhost:8080/api/posts/${postId}/delete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      postId: postId
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+    console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  });
+}
+
 // COMMENT
 const getComments = async (postId) => {
   const response = await fetch(`http://localhost:8080/api/posts/${postId}/comments`);
@@ -122,7 +141,7 @@ const getComment = async (comment) => {
 }
 
 const createComment = async (comment) => {
-  fetch(`http://localhost:8080/api/posts/${comment.post_id}/comments/create`, {
+  await fetch(`http://localhost:8080/api/posts/${comment.post_id}/comments/create`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -143,7 +162,7 @@ const createComment = async (comment) => {
 }
 
 const editComment = async (comment) => {
-  fetch(`http://localhost:8080/api/posts/${comment.post_id}/comments/${comment._id}/edit`, {
+  await fetch(`http://localhost:8080/api/posts/${comment.post_id}/comments/${comment._id}/edit`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -167,5 +186,5 @@ const editComment = async (comment) => {
 }
 
 export { getUsers, getUser, getUserContent, editUser }
-export { getPosts, getPost, editPost }
+export { getPosts, getPost, editPost, deletePost }
 export { getComments, getComment, createComment, editComment }

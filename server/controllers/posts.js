@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
 const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 
 exports.posts_get = (req, res) => {
   Post.find()
@@ -121,19 +122,19 @@ exports.delete_post_post = (req, res) => {
      });
    });
 
- Comment.find({ post_id: req.body.postId})
-   .exec((err, comments) => {
-     if (err) return err;
+  Comment.find({ post_id: req.body.postId})
+    .exec((err, comments) => {
+      if (err) return err;
 
-     // Success
-     // Delete object and redirect to the comment's post.
-     comments.forEach((comment) => {
-       Comment.deleteOne(comment, (err) => {
-         if (err) return err;
-     
-       })
-     });
-   });
+      // Success
+      // Delete object and redirect to the comment's post.
+      comments.forEach((comment) => {
+        Comment.deleteOne(comment, (err) => {
+          if (err) return err;
+      
+        })
+      });
+    });
 
  return;
 }
