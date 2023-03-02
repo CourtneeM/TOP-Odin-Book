@@ -243,6 +243,7 @@ exports.edit_user_post = [
         friends: req.body.friends,
         friend_requests: req.body.friend_requests,
         profile_picture: req.body.profile_picture,
+        about: req.body.about,
         _id: req.params.userId || req.body.userId, //This is required, or a new ID will be assigned!
       });
     } else {
@@ -253,6 +254,7 @@ exports.edit_user_post = [
         friends: req.body.friends,
         friend_requests: req.body.friend_requests,
         profile_picture: req.body.profile_picture,
+        about: req.body.about,
         _id: req.params.userId || req.body.userId, //This is required, or a new ID will be assigned!
       });
     }

@@ -1,8 +1,16 @@
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { editUser } from "../../api";
 
 function UserCard({ user, currentUser, refreshUsers }) {
+  const [editMode, setEditMode] = useState(false);
+  const [aboutUser, setAboutUser] = useState(null);
+
   const params = useParams();
+
+  useEffect(() => {
+    setAboutUser(user.about);
+  }, [user]);
   
   const sendFriendRequest = async (user) => {
     console.log('Send Friend Request');
@@ -59,7 +67,6 @@ function UserCard({ user, currentUser, refreshUsers }) {
     await editUser(selectedUserCopy);
     await refreshUsers();
   }
-
   const removeFriend = async (user) => {
     console.log('Remove Friend');
 
@@ -72,6 +79,21 @@ function UserCard({ user, currentUser, refreshUsers }) {
     await editUser(currentUserCopy);
     await editUser(selectedUserCopy);
     await refreshUsers();
+  }
+
+  const handleSaveProfile = async () => {
+    if (currentUser.id !== params.userId) return;
+
+    const currentUserCopy = Object.assign({}, currentUser);
+    currentUserCopy.about = aboutUser;
+    console.log(currentUserCopy);
+    await editUser(currentUserCopy);
+    setEditMode(false);
+  }
+
+  const handleCancelEdit = () => {
+    setAboutUser(user.about);
+    setEditMode(false);
   }
 
   return (
@@ -88,9 +110,28 @@ function UserCard({ user, currentUser, refreshUsers }) {
                 <p>{user.firstName} {user.lastName}</p>
               </Link>
             }
-            <p>{user.about}</p>
+            {
+              editMode ?
+              <>
+                <textarea value={aboutUser} onChange={(e) => setAboutUser(e.target.value)}></textarea>
+              </> :
+              <p>{aboutUser}</p>
+            }
           </> :
           <p>Loading...</p>
+        }
+        {
+          currentUser.id === params.userId && !editMode ?
+          <button onClick={() => setEditMode(true)}>Edit Profile</button> :
+          null
+        }
+        {
+          currentUser.id === params.userId && editMode ?
+          <>
+            <button onClick={handleSaveProfile}>Save Profile</button>
+            <button onClick={handleCancelEdit}>Cancel</button>
+          </> :
+          null
         }
 
       </section>

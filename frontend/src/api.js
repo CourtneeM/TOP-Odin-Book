@@ -58,6 +58,7 @@ const editUser = async (user) => {
       friends: user.friends,
       friend_requests: user.friendRequests,
       profile_picture: user.profilePicture,
+      about: user.about,
     })
   }).then((res) => {
     return res.json();
