@@ -57,7 +57,7 @@ function UserProfile() {
                 <h2>Comments</h2>
                 {
                   userComments && userComments.length > 0 ?
-                  userComments.map((comment) => <CommentCard comment={comment} currentUser={currentUser} />) :
+                  userComments.map((comment) => <CommentCard comment={comment} currentUser={currentUser} refreshContent={refreshContent} />) :
                   <p>No Comments</p>
                 }
               </section>

@@ -185,6 +185,25 @@ const editComment = async (comment) => {
   });
 }
 
+const deleteComment = async (postId, commentId) => {
+  await fetch(`http://localhost:8080/api/posts/${postId}/comments/${commentId}/delete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      commentId: commentId
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+    console.log('Success:' , data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  });
+}
+
 export { getUsers, getUser, getUserContent, editUser }
 export { getPosts, getPost, editPost, deletePost }
-export { getComments, getComment, createComment, editComment }
+export { getComments, getComment, createComment, editComment, deleteComment }

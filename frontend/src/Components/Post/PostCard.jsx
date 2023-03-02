@@ -151,7 +151,7 @@ function PostCard({ post, currentUser, refreshContent }) {
         <>
           <h3>Comments</h3>
           {
-            comments?.slice(0, numCommentsToLoad).map((comment) => <CommentCard comment={comment} currentUser={currentUser} />)
+            comments?.slice(0, numCommentsToLoad).map((comment) => <CommentCard comment={comment} currentUser={currentUser} refreshContent={refreshPost} />)
           }
           {
             comments?.length > 2 && comments?.length <= numCommentsToLoad ?

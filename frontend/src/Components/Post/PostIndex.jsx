@@ -43,7 +43,7 @@ function PostIndex() {
         {
           posts ?
             posts?.length > 0 ?
-            posts.map((post) => <PostCard post={post} currentUser={currentUser} refreshPosts={refreshPosts} />) :
+            posts.map((post) => <PostCard post={post} currentUser={currentUser} refreshContent={refreshPosts} />) :
             null :
           <p>No Posts to Display</p>
         }
