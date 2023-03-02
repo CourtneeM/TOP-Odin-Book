@@ -83,6 +83,26 @@ const getPost = async (postId) => {
   return data;
 }
 
+const createPost = async (post) => {
+  await fetch('http://localhost:8080/api/posts/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      message: post.message,
+      author: post.author
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+    console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  });
+}
+
 const editPost = async (post) => {
   await fetch(`http://localhost:8080/api/posts/${post._id}/edit`, {
     method: 'POST',
@@ -205,5 +225,5 @@ const deleteComment = async (postId, commentId) => {
 }
 
 export { getUsers, getUser, getUserContent, editUser }
-export { getPosts, getPost, editPost, deletePost }
+export { getPosts, getPost, createPost, editPost, deletePost }
 export { getComments, getComment, createComment, editComment, deleteComment }

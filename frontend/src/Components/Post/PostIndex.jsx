@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUser, getPosts } from '../../api';
+import { getUser, getPosts, createPost } from '../../api';
 
 import Navbar from '../Navbar';
 import PostCard from './PostCard';
@@ -7,6 +7,7 @@ import PostCard from './PostCard';
 function PostIndex() {
   const [currentUser, setCurrentUser] = useState(null);
   const [posts, setPosts] = useState(null);
+  const [newPostMessage, setNewPostMessage] = useState('');
   
   useEffect(() => {
     getUser('63f68657c466418bff0c2d9d').then((res) => {
@@ -17,6 +18,21 @@ function PostIndex() {
   useEffect(() => {
     refreshPosts();
   }, [currentUser]);
+
+  const handleSubmitPost = async () => {
+    if (newPostMessage === '') return;
+
+    const newPost = {
+      message: newPostMessage,
+      author: currentUser.id,
+    }
+
+    await createPost(newPost);
+
+    setNewPostMessage('');
+    toggleDisplayNewPostForm();
+    refreshPosts();
+  }
 
   const refreshPosts = () => {
     getPosts().then((res) => {
@@ -33,12 +49,32 @@ function PostIndex() {
     });
   }
 
+  const toggleDisplayNewPostForm = () => {
+    const displayNewCommentContainer = document.querySelector(`#new-post-container`);
+    const addCommentBtn = document.querySelector(`#add-post-btn`);
+    
+    if (displayNewCommentContainer.style.display === 'none') {
+      displayNewCommentContainer.style.display = 'block'
+      addCommentBtn.style.display = 'none';
+    } else {
+      displayNewCommentContainer.style.display = 'none'
+      addCommentBtn.style.display = 'inline-block';
+    }
+  }
+
   return (
     <div>
       <Navbar />
 
       <div className="post-index-container">
         <h1>Post Index</h1>
+
+        <button id={`add-post-btn`} onClick={toggleDisplayNewPostForm}>Add Post</button>
+        <div id="new-post-container" style={{'display': 'none'}}>
+          <textarea placeholder="Share your thoughts..." value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)}></textarea>
+          <button onClick={handleSubmitPost}>Submit</button>
+          <button onClick={toggleDisplayNewPostForm}>Cancel</button>
+        </div>
 
         {
           posts ?
