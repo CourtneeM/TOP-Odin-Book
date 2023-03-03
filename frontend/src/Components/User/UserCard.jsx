@@ -5,6 +5,7 @@ import { editUser } from "../../api";
 function UserCard({ user, currentUser, refreshUsers }) {
   const [editMode, setEditMode] = useState(false);
   const [aboutUser, setAboutUser] = useState(null);
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState(null);
 
   const params = useParams();
 
@@ -86,7 +87,8 @@ function UserCard({ user, currentUser, refreshUsers }) {
 
     const currentUserCopy = Object.assign({}, currentUser);
     currentUserCopy.about = aboutUser;
-    console.log(currentUserCopy);
+    currentUserCopy.profilePicture.selected = selectedProfilePicture
+
     await editUser(currentUserCopy);
     setEditMode(false);
   }
@@ -96,13 +98,36 @@ function UserCard({ user, currentUser, refreshUsers }) {
     setEditMode(false);
   }
 
+  const handleChangeProfilePicture = async (target) => {
+    const alternateProfilePictures = [...document.querySelectorAll('.alternate-profile-picture')];
+    alternateProfilePictures.forEach((image) => {
+      if (image.id === 'new-profile-picture') {
+        image.removeAttribute('id');
+        image.style.border = '2px solid #000';
+      }
+    });
+    
+    target.id = 'new-profile-picture';
+    target.style.border = '2px solid #000';
+
+    setSelectedProfilePicture(target.src);
+  }
+
   return (
     <div className={`user-info-card-${user.id}`}>
       <section className="user-info-header">
         {
           user ?
           <>
-            <img src={user.profilePicture} alt="" />
+            {
+              editMode ?
+              user.profilePicture.images.map((image) => {
+                return currentUser.profilePicture.selected === image ?
+                <img src={user.profilePicture.selected} alt="" id="selected-profile-image" style={{'width': '32px'}} /> :
+                <img src={image} alt="" className="alternate-profile-picture" style={{'width': '32px'}} onClick={(e) => handleChangeProfilePicture(e.target)} />
+              }) :
+              <img src={user.profilePicture.selected} alt="" id="selected-profile-image" style={{'width': '32px'}} />
+            }
             {
               params.userId === user.id ?
               <p>{user.firstName} {user.lastName}</p> :

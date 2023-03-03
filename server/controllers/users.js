@@ -37,7 +37,7 @@ exports.users_get = (req, res) => {
   User.find()
     .exec((err, users) => {
       if (err) return err;
-      
+
       res.json(users);
     });
 }
