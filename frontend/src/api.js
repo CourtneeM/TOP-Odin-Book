@@ -1,3 +1,39 @@
+const logIn = async (email, password) => {
+  await fetch('http://localhost:8080/api/log-in', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      username: email,
+      password: password
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+    console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  })
+}
+
+const logOut = async () => {
+  await fetch('http://localhost:8080/api/log-out', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+  }).then((res) => {
+    return res.json;
+  }).then((data) => {
+    console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  });
+}
+
 // USER
 const getUsers = async () => {
   const response = await fetch('http://localhost:8080/api/users');
@@ -42,6 +78,29 @@ const getUserContent = async (userId) => {
   const data = await response.json();
 
   return data;
+}
+
+const createUser = async (user) => {
+  await fetch('http://localhost:8080/api/users/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({
+      first_name: user.firstName,
+      last_name: user.lastName,
+      email: user.email,
+      password: user.password,
+      confirm_password: user.confirmPassword
+    })
+  }).then((res) => {
+    return res.json();
+  }).then((data) => {
+    console.log('Success: ', data);
+  }).catch((err) => {
+    console.log('Error: ', err);
+  });
 }
 
 const editUser = async (user) => {
@@ -225,6 +284,7 @@ const deleteComment = async (postId, commentId) => {
   });
 }
 
-export { getUsers, getUser, getUserContent, editUser }
+export { logIn, logOut }
+export { getUsers, getUser, getUserContent, createUser, editUser }
 export { getPosts, getPost, createPost, editPost, deletePost }
 export { getComments, getComment, createComment, editComment, deleteComment }

@@ -12,7 +12,7 @@ exports.logged_in_user_get = (req, res) => {
   return res.json(req.user);
 }
 
-exports.log_in_post = (req, res) => {
+exports.log_in_post = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
     if (!user) {
