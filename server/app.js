@@ -1,6 +1,6 @@
 const createError = require('http-errors');
-const bodyParser = require('body-parser');
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -14,17 +14,19 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error"));
 
 const app = express();
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: 'http://localhost:3000',
+  credentials: true
 }));
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
+  // cookie: { maxAge: 1000 * 60 * 60 * 24 * 2 },
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,6 +55,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+  res.send('error');
 });
 
 app.listen(process.env.PORT, () => {

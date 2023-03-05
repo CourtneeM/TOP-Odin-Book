@@ -9,18 +9,18 @@ const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 
 exports.logged_in_user_get = (req, res) => {
-  return res.json(req.user);
+  return res.json(req.user ? req.user : null);
 }
 
-exports.log_in_post = (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+exports.log_in_post = async (req, res, next) => {
+  await passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
     if (!user) {
       res.json("No user exists");
     } else {
       req.logIn(user, err => {
         if (err) throw err;
-        res.json('Successfully authenticated');
+        res.json(user);
       })
     }
   })(req, res, next);

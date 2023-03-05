@@ -1,17 +1,25 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { logIn } from '../api';
+import { getLoggedInUser, logIn } from '../api';
 
 function LogInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // if (currentUser) navigate('/index');
+  }, [currentUser]);
 
   const handleLogIn = async () => {
     if (!email || !password) return;
 
     await logIn(email, password);
-
+    await getLoggedInUser(setCurrentUser);
     // setEmail('');
     // setPassword('');
   }

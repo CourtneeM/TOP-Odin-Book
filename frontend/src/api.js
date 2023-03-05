@@ -2,8 +2,9 @@ const logIn = async (email, password) => {
   await fetch('http://localhost:8080/api/log-in', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
+    credentials: 'include',
     mode: 'cors',
     body: JSON.stringify({
       username: email,
@@ -12,6 +13,7 @@ const logIn = async (email, password) => {
   }).then((res) => {
     return res.json();
   }).then((data) => {
+    console.log(data);
     console.log('Success: ', data);
   }).catch((err) => {
     console.log('Error: ', err);
@@ -32,6 +34,27 @@ const logOut = async () => {
   }).catch((err) => {
     console.log('Error: ', err);
   });
+}
+
+const getLoggedInUser = async (setCurrentUser) => {
+  const response = await fetch('http://localhost:8080/api/logged-in-user', {
+    credentials: 'include',
+  });
+
+  const data = await response.json();
+  console.log(data);
+  const userInfo = {
+    id: data._id,
+    firstName: data.first_name,
+    lastName: data.last_name,
+    email: data.email,
+    friends: data.friends,
+    friendRequests: data.friend_requests,
+    profilePicture: data.profile_picture,
+    about: data.about,
+  }
+
+  setCurrentUser(userInfo);
 }
 
 // USER
@@ -284,7 +307,7 @@ const deleteComment = async (postId, commentId) => {
   });
 }
 
-export { logIn, logOut }
+export { logIn, logOut, getLoggedInUser }
 export { getUsers, getUser, getUserContent, createUser, editUser }
 export { getPosts, getPost, createPost, editPost, deletePost }
 export { getComments, getComment, createComment, editComment, deleteComment }
