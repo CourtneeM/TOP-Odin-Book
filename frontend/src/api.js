@@ -21,16 +21,12 @@ const logIn = async (email, password) => {
 }
 
 const logOut = async () => {
-  await fetch('http://localhost:8080/api/log-out', {
+  await fetch('/api/log-out', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     mode: 'cors',
-  }).then((res) => {
-    return res.json;
-  }).then((data) => {
-    console.log('Success: ', data);
   }).catch((err) => {
     console.log('Error: ', err);
   });
@@ -40,9 +36,8 @@ const getLoggedInUser = async (setCurrentUser) => {
   const response = await fetch('http://localhost:8080/api/logged-in-user', {
     credentials: 'include',
   });
-
   const data = await response.json();
-  console.log(data);
+
   const userInfo = {
     id: data._id,
     firstName: data.first_name,

@@ -12,7 +12,7 @@ function LogInPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (currentUser) navigate('/index');
+    if (currentUser) navigate('/index');
   }, [currentUser]);
 
   const handleLogIn = async () => {

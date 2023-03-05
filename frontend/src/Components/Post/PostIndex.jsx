@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUser, getPosts, createPost } from '../../api';
+import { getPosts, createPost, getLoggedInUser } from '../../api';
 
 import Navbar from '../Navbar';
 import PostCard from './PostCard';
@@ -10,10 +10,8 @@ function PostIndex() {
   const [newPostMessage, setNewPostMessage] = useState('');
   
   useEffect(() => {
-    getUser('63f68657c466418bff0c2d9d').then((res) => {
-      setCurrentUser(res);
-    });
-  }, [])
+    getLoggedInUser(setCurrentUser);
+  }, []);
 
   useEffect(() => {
     refreshPosts();
