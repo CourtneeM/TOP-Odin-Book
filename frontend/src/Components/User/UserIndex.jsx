@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { getUsers } from "../../api";
 
+import Navbar from "../Navbar";
 import UserCard from '../User/UserCard';
 
-function UserIndex() {
-  const [currentUser, setCurrentUser] = useState(null);
+function UserIndex({ currentUser, setCurrentUser }) {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
@@ -13,13 +13,14 @@ function UserIndex() {
 
   const refreshUsers = async () => {
     await getUsers().then((res) => {
-      setCurrentUser(res.filter(async (user) => await user.firstName === 'Allison')[0]);
       setUsers(res);
     });
   }
 
   return (
     <div>
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+
       <h1>User Index</h1>
 
       {

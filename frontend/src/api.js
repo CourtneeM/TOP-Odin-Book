@@ -20,13 +20,15 @@ const logIn = async (email, password) => {
   })
 }
 
-const logOut = async () => {
+const logOut = async (setCurrentUser) => {
   await fetch('/api/log-out', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     mode: 'cors',
+  }).then(() => {
+    setCurrentUser(null);
   }).catch((err) => {
     console.log('Error: ', err);
   });
@@ -37,6 +39,8 @@ const getLoggedInUser = async (setCurrentUser) => {
     credentials: 'include',
   });
   const data = await response.json();
+
+  if (!data) return;
 
   const userInfo = {
     id: data._id,
@@ -49,7 +53,7 @@ const getLoggedInUser = async (setCurrentUser) => {
     about: data.about,
   }
 
-  setCurrentUser(userInfo);
+  await setCurrentUser(userInfo);
 }
 
 // USER

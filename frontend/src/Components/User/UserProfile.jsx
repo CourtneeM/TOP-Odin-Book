@@ -7,8 +7,7 @@ import UserCard from './UserCard';
 import PostCard from '../Post/PostCard';
 import CommentCard from '../Comment/CommentCard';
 
-function UserProfile() {
-  const [currentUser, setCurrentUser] = useState(null);
+function UserProfile({ currentUser, setCurrentUser }) {
   const [user, setUser] = useState(null);
   const [userPosts, setUserPosts] = useState(null);
   const [userComments, setUserComments] = useState(null);
@@ -22,7 +21,6 @@ function UserProfile() {
 
   const refreshUsers = async () => {
     await getUsers().then(async (res) => {
-      setCurrentUser(await res.filter((user) => user.firstName === 'Allison')[0]);
       setUser(await res.filter((user) => user.id === params.userId)[0]);
     });
   }
@@ -36,7 +34,7 @@ function UserProfile() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <div className="user-profile-container">
         {
           user ?

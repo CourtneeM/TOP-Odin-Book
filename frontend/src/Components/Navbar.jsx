@@ -1,19 +1,12 @@
-import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { getLoggedInUser, logOut } from '../api';
+import { logOut } from '../api';
 
-function Navbar() {
-  const [currentUser, setCurrentUser] = useState(null);
-
+function Navbar({ currentUser, setCurrentUser }) {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getLoggedInUser(setCurrentUser);
-  }, []);
-
   const handleLogOut = async () => {
-    await logOut();
+    await logOut(setCurrentUser);
     navigate('/');
   }
 

@@ -146,12 +146,12 @@ function UserCard({ user, currentUser, refreshUsers }) {
           <p>Loading...</p>
         }
         {
-          currentUser.id === params.userId && !editMode ?
+          currentUser?.id === params.userId && !editMode ?
           <button onClick={() => setEditMode(true)}>Edit Profile</button> :
           null
         }
         {
-          currentUser.id === params.userId && editMode ?
+          currentUser?.id === params.userId && editMode ?
           <>
             <button onClick={handleSaveProfile}>Save Profile</button>
             <button onClick={handleCancelEdit}>Cancel</button>
@@ -162,12 +162,12 @@ function UserCard({ user, currentUser, refreshUsers }) {
       </section>
 
       {
-        currentUser.id !== user.id ?
-          !currentUser.friends.includes(user.id) ?
-            currentUser.friendRequests.sent.includes(user.id) ?
+        currentUser?.id !== user.id ?
+          !currentUser?.friends.includes(user.id) ?
+            currentUser?.friendRequests.sent.includes(user.id) ?
             <button onClick={() => cancelFriendRequest(user)}>Cancel Friend Request</button> :
 
-            currentUser.friendRequests.received.includes(user.id) ?
+            currentUser?.friendRequests.received.includes(user.id) ?
             <>
               <button onClick={() => acceptFriendRequest(user)}>Accept Friend Request</button>
               <button onClick={() => declineFriendRequest(user)}>Decline Friend Request</button>

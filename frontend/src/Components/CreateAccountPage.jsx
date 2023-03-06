@@ -1,21 +1,31 @@
+import { useEffect } from "react";
 import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { createUser } from '../api';
+import { createUser, logIn, getLoggedInUser } from '../api';
 
-function CreateAccountPage() {
+function CreateAccountPage({ currentUser, setCurrentUser }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) navigate('/index');
+  }, [currentUser]);
+
   const handleCreateAccount = async () => {
     if (!firstName || !lastName || !email || !password || !confirmPassword) return;
+    if (password !== confirmPassword) return;
 
     const newUser = { firstName, lastName, email, password, confirmPassword }
 
     await createUser(newUser);
+    await logIn(email, password);
+    await getLoggedInUser(setCurrentUser);
 
     setFirstName('');
     setLastName('');
@@ -47,7 +57,7 @@ function CreateAccountPage() {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </label>
         <label htmlFor="confirm-password">
-          Password
+          Confirm Password
           <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
         </label>
         <button onClick={handleCreateAccount}>Log In</button>

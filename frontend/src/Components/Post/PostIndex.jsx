@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
-import { getPosts, createPost, getLoggedInUser } from '../../api';
+import { useNavigate } from 'react-router-dom';
+import { getPosts, createPost } from '../../api';
 
 import Navbar from '../Navbar';
 import PostCard from './PostCard';
 
-function PostIndex() {
-  const [currentUser, setCurrentUser] = useState(null);
+function PostIndex({ currentUser, setCurrentUser }) {
   const [posts, setPosts] = useState(null);
   const [newPostMessage, setNewPostMessage] = useState('');
-  
-  useEffect(() => {
-    getLoggedInUser(setCurrentUser);
-  }, []);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!currentUser) navigate('/');
+
     refreshPosts();
   }, [currentUser]);
 
@@ -62,7 +62,7 @@ function PostIndex() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
       <div className="post-index-container">
         <h1>Post Index</h1>

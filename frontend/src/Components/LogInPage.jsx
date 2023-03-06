@@ -4,10 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { getLoggedInUser, logIn } from '../api';
 
-function LogInPage() {
+function LogInPage({ currentUser, setCurrentUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate();
 
@@ -20,8 +19,8 @@ function LogInPage() {
 
     await logIn(email, password);
     await getLoggedInUser(setCurrentUser);
-    // setEmail('');
-    // setPassword('');
+    setEmail('');
+    setPassword('');
   }
 
   return (
