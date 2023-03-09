@@ -13,9 +13,11 @@ function PostIndex({ currentUser, setCurrentUser }) {
 
   useEffect(() => {
     if (!currentUser) navigate('/');
+  }, [currentUser])
 
+  useEffect(() => {
     refreshPosts();
-  }, [currentUser]);
+  }, []);
 
   const handleSubmitPost = async () => {
     if (newPostMessage === '') return;

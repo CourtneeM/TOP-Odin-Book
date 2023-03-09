@@ -67,13 +67,15 @@ function CommentCard({ comment, currentUser, refreshContent }) {
       }
 
       {
-        comment.likes.includes(currentUser.id) ?
-        <button onClick={toggleLike}>Unlike</button> :
-        <button onClick={toggleLike}>Like</button>
+        currentUser ?
+          comment.likes.includes(currentUser.id) ?
+          <button onClick={toggleLike}>Unlike</button> :
+          <button onClick={toggleLike}>Like</button> :
+        null
       }
 
       {
-        currentUser.id === comment.author._id ?
+        currentUser && (currentUser.id === comment.author._id) ?
         <button onClick={handleDeleteComment}>Delete Comment</button> :
         null
       }

@@ -6,16 +6,19 @@ import CommentCard from '../Comment/CommentCard';
 
 function PostCard({ post, currentUser, refreshContent }) {
   const [selectedPost, setSelectedPost] = useState(null);
+  const [newPostMessage, setNewPostMessage] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [users, setUsers] = useState(null);
   const [comments, setComments] = useState(null);
   const [commentsPreview, setCommentsPreview] = useState(true);
   const [numCommentsToLoad, setNumCommentsToLoad] = useState(2);
-  const [users, setUsers] = useState(null);
   const [newCommentMessage, setNewCommentMessage] = useState('');
 
   const params = useParams();
 
   useEffect(() => {
     setSelectedPost(post);
+    setNewPostMessage(post.message);
   }, [post]);
 
   useEffect(() => {
@@ -59,6 +62,21 @@ function PostCard({ post, currentUser, refreshContent }) {
     });
   }
 
+  const handleEditPost = async () => {
+    if (currentUser.id !== post.author._id) return;
+
+    const postCopy = Object.assign(post, {});
+    postCopy.message = newPostMessage;
+
+    await editPost(postCopy);
+
+    toggleEditPostForm();
+    refreshPost();
+  }
+  const handleCancelEditPost = () => {
+    setNewPostMessage(selectedPost.message);
+    toggleEditPostForm();
+  }
   const handleDeletePost = async () => {
     if (currentUser.id !== post.author._id) return;
 
@@ -80,6 +98,20 @@ function PostCard({ post, currentUser, refreshContent }) {
     const displayWhoLikesContainer = document.querySelector(`#who-likes-${post._id}-container`);
     
     displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
+  }
+  const toggleEditPostForm = () => {
+    setEditMode(!editMode);
+
+    const postMessageP = document.querySelector(`.post-${post._id}-message`);
+    const editPostMessageEl = document.querySelector(`.edit-post-${post._id}-message`);
+    
+    if (!editMode) {
+      postMessageP.style.display = 'none';
+      editPostMessageEl.style.display = 'block';
+    } else {
+      postMessageP.style.display = 'block';
+      editPostMessageEl.style.display = 'none';
+    }
   }
   const toggleDisplayNewCommentForm = () => {
     const displayNewCommentContainer = document.querySelector(`#new-comment-container-${post._id}`);
@@ -104,7 +136,16 @@ function PostCard({ post, currentUser, refreshContent }) {
         </Link>
       }
       <p>{post.timestamp}</p>
-      <p>{post.message}</p>
+
+      {
+        selectedPost ?
+        <>
+          <p className={`post-${post._id}-message`}>{selectedPost.message}</p>
+          <textarea className={`edit-post-${post._id}-message`} value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)} style={{'display': 'none'}}></textarea>
+        </> :
+        <p>Loading message...</p>
+      }
+
       {
         post.likes.length === 0 || post.likes.length > 1 ?
         <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Likes</p> :
@@ -118,9 +159,11 @@ function PostCard({ post, currentUser, refreshContent }) {
         null
       }
       {
-        post.likes.includes(currentUser.id) ? 
-        <button onClick={toggleLike}>Unlike</button> :
-        <button onClick={toggleLike}>Like</button>
+        currentUser ?
+          post.likes.includes(currentUser.id) ? 
+          <button onClick={toggleLike}>Unlike</button> :
+          <button onClick={toggleLike}>Like</button> :
+        null
       }
 
       <div id={`who-likes-${post._id}-container`} style={{'display': 'none'}}>
@@ -133,7 +176,11 @@ function PostCard({ post, currentUser, refreshContent }) {
         }
       </div>
 
-      <button id={`add-comment-btn-${post._id}`} onClick={toggleDisplayNewCommentForm}>Add Comment</button>
+      {
+        currentUser ?
+        <button id={`add-comment-btn-${post._id}`} onClick={toggleDisplayNewCommentForm}>Add Comment</button> :
+        null
+      }
       <div id={`new-comment-container-${post._id}`} style={{'display': 'none'}}>
         <textarea placeholder="Share your thoughts..." value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea>
         <button onClick={handleSubmitComment}>Submit</button>
@@ -141,7 +188,20 @@ function PostCard({ post, currentUser, refreshContent }) {
       </div>
 
       {
-        currentUser.id === post.author._id ?
+        currentUser && (currentUser.id === post.author._id) && !editMode ?
+        <button onClick={toggleEditPostForm}>Edit Post</button> :
+        null
+      }
+      {
+        currentUser && editMode ?
+        <>
+          <button onClick={handleEditPost}>Save</button>
+          <button onClick={handleCancelEditPost}>Cancel Edit</button>
+        </> :
+        null
+      }
+      {
+        currentUser && (currentUser.id === post.author._id) ?
         <button onClick={handleDeletePost}>Delete Post</button> :
         null
       }

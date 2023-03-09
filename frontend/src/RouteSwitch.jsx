@@ -16,7 +16,7 @@ function RouteSwitch() {
     if (currentUser) return;
 
     getLoggedInUser(setCurrentUser);
-  }, []);
+  }, [currentUser]);
 
   return (
     <BrowserRouter>

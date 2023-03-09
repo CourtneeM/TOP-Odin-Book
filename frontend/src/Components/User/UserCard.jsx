@@ -11,6 +11,7 @@ function UserCard({ user, currentUser, refreshUsers }) {
 
   useEffect(() => {
     setAboutUser(user.about);
+    setSelectedProfilePicture(user.profilePicture.selected);
   }, [user]);
   
   const sendFriendRequest = async (user) => {
@@ -87,7 +88,7 @@ function UserCard({ user, currentUser, refreshUsers }) {
 
     const currentUserCopy = Object.assign({}, currentUser);
     currentUserCopy.about = aboutUser;
-    currentUserCopy.profilePicture.selected = selectedProfilePicture
+    currentUserCopy.profilePicture.selected = selectedProfilePicture;
 
     await editUser(currentUserCopy);
     setEditMode(false);
@@ -103,12 +104,12 @@ function UserCard({ user, currentUser, refreshUsers }) {
     alternateProfilePictures.forEach((image) => {
       if (image.id === 'new-profile-picture') {
         image.removeAttribute('id');
-        image.style.border = '2px solid #000';
+        image.style.border = 'none';
       }
     });
     
     target.id = 'new-profile-picture';
-    target.style.border = '2px solid #000';
+    target.style.border = '2px solid red';
 
     setSelectedProfilePicture(target.src);
   }
@@ -122,11 +123,11 @@ function UserCard({ user, currentUser, refreshUsers }) {
             {
               editMode ?
               user.profilePicture.images.map((image) => {
-                return currentUser.profilePicture.selected === image ?
-                <img src={user.profilePicture.selected} alt="" id="selected-profile-image" style={{'width': '32px'}} /> :
+                return selectedProfilePicture === image ?
+                <img src={selectedProfilePicture} alt="" id="selected-profile-picture" style={{'width': '32px', 'border': '2px solid #000'}} /> :
                 <img src={image} alt="" className="alternate-profile-picture" style={{'width': '32px'}} onClick={(e) => handleChangeProfilePicture(e.target)} />
               }) :
-              <img src={user.profilePicture.selected} alt="" id="selected-profile-image" style={{'width': '32px'}} />
+              <img src={selectedProfilePicture} alt="" id="selected-profile-picture" style={{'width': '32px'}} />
             }
             {
               params.userId === user.id ?
@@ -146,12 +147,12 @@ function UserCard({ user, currentUser, refreshUsers }) {
           <p>Loading...</p>
         }
         {
-          currentUser?.id === params.userId && !editMode ?
+          currentUser && (currentUser.id === params.userId) && !editMode ?
           <button onClick={() => setEditMode(true)}>Edit Profile</button> :
           null
         }
         {
-          currentUser?.id === params.userId && editMode ?
+          currentUser && (currentUser.id === params.userId) && editMode ?
           <>
             <button onClick={handleSaveProfile}>Save Profile</button>
             <button onClick={handleCancelEdit}>Cancel</button>
@@ -162,12 +163,12 @@ function UserCard({ user, currentUser, refreshUsers }) {
       </section>
 
       {
-        currentUser?.id !== user.id ?
-          !currentUser?.friends.includes(user.id) ?
-            currentUser?.friendRequests.sent.includes(user.id) ?
+        currentUser && (currentUser.id !== user.id) ?
+          !currentUser.friends.includes(user.id) ?
+            currentUser.friendRequests.sent.includes(user.id) ?
             <button onClick={() => cancelFriendRequest(user)}>Cancel Friend Request</button> :
 
-            currentUser?.friendRequests.received.includes(user.id) ?
+            currentUser.friendRequests.received.includes(user.id) ?
             <>
               <button onClick={() => acceptFriendRequest(user)}>Accept Friend Request</button>
               <button onClick={() => declineFriendRequest(user)}>Decline Friend Request</button>

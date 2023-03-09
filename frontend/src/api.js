@@ -39,7 +39,6 @@ const getLoggedInUser = async (setCurrentUser) => {
     credentials: 'include',
   });
   const data = await response.json();
-
   if (!data) return;
 
   const userInfo = {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../api";
 
 import Navbar from "../Navbar";
@@ -7,7 +8,14 @@ import UserCard from '../User/UserCard';
 function UserIndex({ currentUser, setCurrentUser }) {
   const [users, setUsers] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (!currentUser) navigate('/');
+  }, [currentUser])
+
+  useEffect(() => {
+
     refreshUsers();
   }, []);
 
@@ -20,15 +28,20 @@ function UserIndex({ currentUser, setCurrentUser }) {
   return (
     <div>
       <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
-
-      <h1>User Index</h1>
-
       {
-        users && users.length > 0 ?
-        users.map((user) => {
-          return <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
-        }) :
-        null
+        currentUser ?
+        <>
+          <h1>User Index</h1>
+
+          {
+            users && users.length > 0 ?
+            users.map((user) => {
+              return <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
+            }) :
+            null
+          }
+        </> :
+        <p>Not authorized to view this page.</p>
       }
     </div>
   );

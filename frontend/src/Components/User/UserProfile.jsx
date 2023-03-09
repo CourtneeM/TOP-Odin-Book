@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getUsers, getUserContent } from '../../api';
 
 import Navbar from "../Navbar";
@@ -8,11 +8,23 @@ import PostCard from '../Post/PostCard';
 import CommentCard from '../Comment/CommentCard';
 
 function UserProfile({ currentUser, setCurrentUser }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [user, setUser] = useState(null);
   const [userPosts, setUserPosts] = useState(null);
   const [userComments, setUserComments] = useState(null);
 
   const params = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) setIsLoggedIn(true);
+    if (!currentUser) setIsLoggedIn(false);
+  }, [currentUser]);
+  
+  useEffect(() => {
+    if (currentUser === null && isLoggedIn === null) return;
+    // if (!isLoggedIn) navigate('/');
+  }, [isLoggedIn]);
 
   useEffect(() => {
     refreshUsers();
@@ -35,35 +47,38 @@ function UserProfile({ currentUser, setCurrentUser }) {
   return (
     <div>
       <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
-      <div className="user-profile-container">
-        {
-          user ?
-            <>
-              <section className="profile-header-container">
-                <h1>User Profile</h1>
-                <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
-              </section>
-              <section className="user-posts-container">
-                <h2>Posts</h2>
-                {
-                  userPosts && userPosts.length > 0 ?
-                  userPosts.map((post) => <PostCard post={post} currentUser={currentUser} refreshContent={refreshContent} />) :
-                  <p>No Posts</p>
-                }
-              </section>
-              <section className="user-comments-container">
-                <h2>Comments</h2>
-                {
-                  userComments && userComments.length > 0 ?
-                  userComments.map((comment) => <CommentCard comment={comment} currentUser={currentUser} refreshContent={refreshContent} />) :
-                  <p>No Comments</p>
-                }
-              </section>
-            </> :
-          <p>Loading...</p>
-        }
-      </div>
-
+      {
+        currentUser ?
+        <div className="user-profile-container">
+          {
+            user ?
+              <>
+                <section className="profile-header-container">
+                  <h1>User Profile</h1>
+                  <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
+                </section>
+                <section className="user-posts-container">
+                  <h2>Posts</h2>
+                  {
+                    userPosts && userPosts.length > 0 ?
+                    userPosts.map((post) => <PostCard post={post} currentUser={currentUser} refreshContent={refreshContent} />) :
+                    <p>No Posts</p>
+                  }
+                </section>
+                <section className="user-comments-container">
+                  <h2>Comments</h2>
+                  {
+                    userComments && userComments.length > 0 ?
+                    userComments.map((comment) => <CommentCard comment={comment} currentUser={currentUser} refreshContent={refreshContent} />) :
+                    <p>No Comments</p>
+                  }
+                </section>
+              </> :
+            <p>Loading...</p>
+          }
+        </div> :
+        <p>Not authorized to view this page.</p>
+      }
     </div>
   );
 }
