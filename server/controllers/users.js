@@ -8,8 +8,28 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 
+
+
 exports.logged_in_user_get = (req, res) => {
   return res.json(req.user ? req.user : null);
+}
+
+exports.auth_google = passport.authenticate('google', { scope: ['email', 'profile'] });
+
+exports.auth_google_redirect = passport.authenticate('google',
+  {
+    successRedirect: 'http://localhost:3000/index',
+    failureRedirect: '/api/auth/failure',
+    failureMessage: true
+  }
+);
+
+exports.auth_success = (req, res) => {
+  console.log('get user');
+}
+
+exports.auth_failure = (req, res) => {
+  console.log('Something went wrong...');
 }
 
 exports.log_in_post = async (req, res, next) => {
