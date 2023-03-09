@@ -13,7 +13,7 @@ exports.comments_get = (req, res) => {
     });
 }
 exports.comment_get = (req, res) => {
-  Comment.find({ _id: req.params.commentId })
+  Comment.findOne({ _id: req.params.commentId })
     .populate('author')
     .exec((err, comment) => {
       if (err) return err;

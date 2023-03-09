@@ -6,11 +6,14 @@ import { getUsers, getComment, editComment, deleteComment } from '../../api';
 function CommentCard({ comment, currentUser, refreshContent }) {
   const [selectedComment, setSelectedComment] = useState(null);
   const [users, setUsers] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [newCommentMessage, setNewCommentMessage] = useState('');
 
   const params = useParams();
 
   useEffect(() => {
     setSelectedComment(comment);
+    setNewCommentMessage(comment.message);
   }, [comment]);
 
   useEffect(() => {
@@ -24,7 +27,21 @@ function CommentCard({ comment, currentUser, refreshContent }) {
       setSelectedComment(res);
     });
   }
+  const handleEditComment = async () => {
+    if (currentUser.id !== comment.author._id) return;
 
+    const commentCopy = Object.assign(comment, {});
+    commentCopy.message = newCommentMessage;
+
+    await editComment(commentCopy);
+    
+    setEditMode(!editMode);
+    refreshComment();
+  }
+  const handleCancelEditComment = () => {
+    setNewCommentMessage(selectedComment.message);
+    setEditMode(false);
+  }
   const handleDeleteComment = async () => {
     if (currentUser.id !== comment.author._id) return;
 
@@ -59,7 +76,14 @@ function CommentCard({ comment, currentUser, refreshContent }) {
         </Link>
       }
       <p>{comment.timestamp}</p>
-      <p>{comment.message}</p>
+      {
+        selectedComment && !editMode ?
+        <p className={`comment-${comment._id}-message`}>{selectedComment.message}</p> :
+          currentUser && editMode ?
+          <textarea className={`edit-comment-${comment._id}-message`} value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea> :
+        <p>Loading comment...</p>
+      }
+
       {
         comment.likes.length === 0 || comment.likes.length > 1 ?
         <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Likes</p> :
@@ -74,6 +98,19 @@ function CommentCard({ comment, currentUser, refreshContent }) {
         null
       }
 
+      {
+        currentUser && (currentUser.id === comment.author._id) && !editMode ?
+        <button onClick={() => setEditMode(true)}>Edit Comment</button> :
+        null
+      }
+      {
+        currentUser && (currentUser.id === comment.author._id) && editMode ?
+        <>
+          <button onClick={handleEditComment}>Save</button>
+          <button onClick={handleCancelEditComment}>Cancel Edit</button>
+        </> :
+        null
+      }
       {
         currentUser && (currentUser.id === comment.author._id) ?
         <button onClick={handleDeleteComment}>Delete Comment</button> :
