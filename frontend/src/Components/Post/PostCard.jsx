@@ -70,12 +70,12 @@ function PostCard({ post, currentUser, refreshContent }) {
 
     await editPost(postCopy);
 
-    toggleEditPostForm();
+    setEditMode(false);
     refreshPost();
   }
   const handleCancelEditPost = () => {
     setNewPostMessage(selectedPost.message);
-    toggleEditPostForm();
+    setEditMode(false);
   }
   const handleDeletePost = async () => {
     if (currentUser.id !== post.author._id) return;
@@ -99,20 +99,7 @@ function PostCard({ post, currentUser, refreshContent }) {
     
     displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
   }
-  const toggleEditPostForm = () => {
-    setEditMode(!editMode);
 
-    const postMessageP = document.querySelector(`.post-${post._id}-message`);
-    const editPostMessageEl = document.querySelector(`.edit-post-${post._id}-message`);
-    
-    if (!editMode) {
-      postMessageP.style.display = 'none';
-      editPostMessageEl.style.display = 'block';
-    } else {
-      postMessageP.style.display = 'block';
-      editPostMessageEl.style.display = 'none';
-    }
-  }
   const toggleDisplayNewCommentForm = () => {
     const displayNewCommentContainer = document.querySelector(`#new-comment-container-${post._id}`);
     const addCommentBtn = document.querySelector(`#add-comment-btn-${post._id}`);
@@ -138,11 +125,10 @@ function PostCard({ post, currentUser, refreshContent }) {
       <p>{post.timestamp}</p>
 
       {
-        selectedPost ?
-        <>
-          <p className={`post-${post._id}-message`}>{selectedPost.message}</p>
-          <textarea className={`edit-post-${post._id}-message`} value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)} style={{'display': 'none'}}></textarea>
-        </> :
+        selectedPost && !editMode ?
+        <p className={`post-${post._id}-message`}>{selectedPost.message}</p> :
+          currentUser && editMode ?
+          <textarea className={`edit-post-${post._id}-message`} value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)}></textarea> :
         <p>Loading message...</p>
       }
 
@@ -189,7 +175,7 @@ function PostCard({ post, currentUser, refreshContent }) {
 
       {
         currentUser && (currentUser.id === post.author._id) && !editMode ?
-        <button onClick={toggleEditPostForm}>Edit Post</button> :
+        <button onClick={() => setEditMode(true)}>Edit Post</button> :
         null
       }
       {
