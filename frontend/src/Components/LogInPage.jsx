@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { getLoggedInUser, logIn, logInGoogle } from '../api';
+import { getLoggedInUser, logIn } from '../api';
 
 function LogInPage({ currentUser, setCurrentUser }) {
   const [email, setEmail] = useState('');
@@ -18,7 +18,7 @@ function LogInPage({ currentUser, setCurrentUser }) {
     if (!email || !password) return;
 
     await logIn(email, password);
-    await getLoggedInUser(setCurrentUser);
+    // await getLoggedInUser(setCurrentUser);
     setEmail('');
     setPassword('');
   }

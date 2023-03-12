@@ -2,11 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { logOut } from '../api';
 
-function Navbar({ currentUser, setCurrentUser }) {
+function Navbar({ currentUser, setCurrentUser, setAuthenticated }) {
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
-    await logOut(setCurrentUser);
+    await logOut(setCurrentUser, setAuthenticated);
     navigate('/');
   }
 

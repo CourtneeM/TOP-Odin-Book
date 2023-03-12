@@ -10,7 +10,6 @@ module.exports = function (passport) {
     },
     async (request, accessToken, refreshToken, profile, done) => {
       let user = await User.findOne({ email: profile.email });
-
       if (!user) {
         const newUser = {
           first_name: profile.name.givenName,

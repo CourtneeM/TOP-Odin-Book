@@ -20,7 +20,7 @@ const logIn = async (email, password) => {
   })
 }
 
-const logOut = async (setCurrentUser) => {
+const logOut = async (setCurrentUser, setAuthenticated) => {
   await fetch('/api/log-out', {
     method: 'POST',
     headers: {
@@ -29,17 +29,21 @@ const logOut = async (setCurrentUser) => {
     mode: 'cors',
   }).then(() => {
     setCurrentUser(null);
+    setAuthenticated(false);
+    localStorage.setItem('userId', null);
   }).catch((err) => {
     console.log('Error: ', err);
   });
 }
 
-const getLoggedInUser = async (setCurrentUser) => {
+const getLoggedInUser = async (setCurrentUser, setAuthenticated) => {
   const response = await fetch('http://localhost:8080/api/logged-in-user', {
     credentials: 'include',
   });
   const data = await response.json();
   if (!data) return;
+
+  if (localStorage.getItem('userId') === 'null') localStorage.setItem('userId', data._id);
 
   const userInfo = {
     id: data._id,
@@ -53,6 +57,7 @@ const getLoggedInUser = async (setCurrentUser) => {
   }
 
   await setCurrentUser(userInfo);
+  await setAuthenticated(true);
 }
 
 // USER

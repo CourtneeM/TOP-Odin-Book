@@ -5,17 +5,11 @@ const users_controller  = require('../controllers/users');
 const posts_controller  = require('../controllers/posts');
 const comments_controller  = require('../controllers/comments');
 
-// const isLoggedIn = (req, res, next) => {
-//   req.user ? next() : res.sendStatus(401);
-// }
-
 /* USER */
 router.get('/logged-in-user', users_controller.logged_in_user_get);
 router.post('/log-in', users_controller.log_in_post);
 router.get('/auth/google', users_controller.auth_google);
 router.get('/google/callback', users_controller.auth_google_redirect);
-router.get('/auth/success', users_controller.auth_success);
-router.get('/auth/failure', users_controller.auth_failure);
 router.post('/log-out', users_controller.log_out_post);
 
 router.get('/users', users_controller.users_get);

@@ -1,23 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getPosts, createPost } from '../../api';
 
 import Navbar from '../Navbar';
 import PostCard from './PostCard';
 
-function PostIndex({ currentUser, setCurrentUser }) {
+function PostIndex({ currentUser, setCurrentUser, setAuthenticated }) {
   const [posts, setPosts] = useState(null);
   const [newPostMessage, setNewPostMessage] = useState('');
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!currentUser) navigate('/');
-  }, [currentUser])
-
   useEffect(() => {
     refreshPosts();
-  }, []);
+  }, [currentUser]);
+
 
   const handleSubmitPost = async () => {
     if (newPostMessage === '') return;
@@ -64,7 +58,7 @@ function PostIndex({ currentUser, setCurrentUser }) {
 
   return (
     <div>
-      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} />
 
       <div className="post-index-container">
         <h1>Post Index</h1>

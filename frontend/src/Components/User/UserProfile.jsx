@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getUsers, getUserContent } from '../../api';
 
 import Navbar from "../Navbar";
@@ -7,24 +7,12 @@ import UserCard from './UserCard';
 import PostCard from '../Post/PostCard';
 import CommentCard from '../Comment/CommentCard';
 
-function UserProfile({ currentUser, setCurrentUser }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+function UserProfile({ currentUser, setCurrentUser, setAuthenticated }) {
   const [user, setUser] = useState(null);
   const [userPosts, setUserPosts] = useState(null);
   const [userComments, setUserComments] = useState(null);
 
   const params = useParams();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (currentUser) setIsLoggedIn(true);
-    if (!currentUser) setIsLoggedIn(false);
-  }, [currentUser]);
-  
-  useEffect(() => {
-    if (currentUser === null && isLoggedIn === null) return;
-    // if (!isLoggedIn) navigate('/');
-  }, [isLoggedIn]);
 
   useEffect(() => {
     refreshUsers();
@@ -46,7 +34,7 @@ function UserProfile({ currentUser, setCurrentUser }) {
 
   return (
     <div>
-      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} />
       {
         currentUser ?
         <div className="user-profile-container">

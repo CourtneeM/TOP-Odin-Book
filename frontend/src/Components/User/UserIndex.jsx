@@ -1,21 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../api";
 
 import Navbar from "../Navbar";
 import UserCard from '../User/UserCard';
 
-function UserIndex({ currentUser, setCurrentUser }) {
+function UserIndex({ currentUser, setCurrentUser, setAuthenticated }) {
   const [users, setUsers] = useState(null);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (!currentUser) navigate('/');
-  }, [currentUser])
-
-  useEffect(() => {
-
     refreshUsers();
   }, []);
 
@@ -27,7 +19,7 @@ function UserIndex({ currentUser, setCurrentUser }) {
 
   return (
     <div>
-      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} />
       {
         currentUser ?
         <>

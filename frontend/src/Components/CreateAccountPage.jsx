@@ -25,7 +25,7 @@ function CreateAccountPage({ currentUser, setCurrentUser }) {
 
     await createUser(newUser);
     await logIn(email, password);
-    await getLoggedInUser(setCurrentUser);
+    // await getLoggedInUser(setCurrentUser);
 
     setFirstName('');
     setLastName('');
