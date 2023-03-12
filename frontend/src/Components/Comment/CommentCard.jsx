@@ -92,28 +92,34 @@ function CommentCard({ comment, currentUser, refreshContent }) {
 
       {
         currentUser ?
-          comment.likes.includes(currentUser.id) ?
-          <button onClick={toggleLike}>Unlike</button> :
-          <button onClick={toggleLike}>Like</button> :
-        null
-      }
+          <>
+            {
+              comment.likes.includes(currentUser.id) ?
+              <button onClick={toggleLike}>Unlike</button> :
+              <button onClick={toggleLike}>Like</button>
+            }
 
-      {
-        currentUser && (currentUser.id === comment.author._id) && !editMode ?
-        <button onClick={() => setEditMode(true)}>Edit Comment</button> :
-        null
-      }
-      {
-        currentUser && (currentUser.id === comment.author._id) && editMode ?
-        <>
-          <button onClick={handleEditComment}>Save</button>
-          <button onClick={handleCancelEditComment}>Cancel Edit</button>
-        </> :
-        null
-      }
-      {
-        currentUser && (currentUser.id === comment.author._id) ?
-        <button onClick={handleDeleteComment}>Delete Comment</button> :
+            {
+              (currentUser.id === comment.author._id) && !editMode ?
+              <button onClick={() => setEditMode(true)}>Edit Comment</button> :
+              null
+            }
+
+            {
+              (currentUser.id === comment.author._id) && editMode ?
+              <>
+                <button onClick={handleEditComment}>Save</button>
+                <button onClick={handleCancelEditComment}>Cancel Edit</button>
+              </> :
+              null
+            }
+
+            {
+              (currentUser.id === comment.author._id) && editMode ?
+              <button onClick={handleDeleteComment}>Delete Comment</button> :
+              null
+            }
+          </> :
         null
       }
 
