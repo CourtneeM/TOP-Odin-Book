@@ -174,21 +174,29 @@ function PostCard({ post, currentUser, refreshContent }) {
       </div>
 
       {
-        currentUser && (currentUser.id === post.author._id) && !editMode ?
-        <button onClick={() => setEditMode(true)}>Edit Post</button> :
-        null
-      }
-      {
-        currentUser && editMode ?
+        currentUser ?
         <>
-          <button onClick={handleEditPost}>Save</button>
-          <button onClick={handleCancelEditPost}>Cancel Edit</button>
+          {
+            (currentUser.id === post.author._id) && !editMode ?
+            <button onClick={() => setEditMode(true)}>Edit Post</button> :
+            null
+          }
+
+          {
+            editMode ?
+            <>
+              <button onClick={handleEditPost}>Save</button>
+              <button onClick={handleCancelEditPost}>Cancel Edit</button>
+            </> :
+            null
+          }
+
+          {
+            (currentUser.id === post.author._id) && editMode ?
+            <button onClick={handleDeletePost}>Delete Post</button> :
+            null
+          }
         </> :
-        null
-      }
-      {
-        currentUser && (currentUser.id === post.author._id) ?
-        <button onClick={handleDeletePost}>Delete Post</button> :
         null
       }
 
