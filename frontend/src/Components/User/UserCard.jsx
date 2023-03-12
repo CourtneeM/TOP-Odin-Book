@@ -147,19 +147,25 @@ function UserCard({ user, currentUser, refreshUsers }) {
           <p>Loading...</p>
         }
         {
-          currentUser && (currentUser.id === params.userId) && !editMode ?
-          <button onClick={() => setEditMode(true)}>Edit Profile</button> :
-          null
-        }
-        {
-          currentUser && (currentUser.id === params.userId) && editMode ?
+          currentUser ?
           <>
-            <button onClick={handleSaveProfile}>Save Profile</button>
-            <button onClick={handleCancelEdit}>Cancel</button>
+            {
+              (currentUser.id === params.userId) && !editMode ?
+              <button onClick={() => setEditMode(true)}>Edit Profile</button> :
+              null
+            }
+
+            {
+              (currentUser.id === params.userId) && editMode ?
+              <>
+                <button onClick={handleSaveProfile}>Save Profile</button>
+                <button onClick={handleCancelEdit}>Cancel</button>
+              </> :
+              null
+            }
           </> :
           null
         }
-
       </section>
 
       {
