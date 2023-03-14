@@ -6,6 +6,7 @@ import PostCard from './PostCard';
 
 function PostIndex({ currentUser, setCurrentUser, setAuthenticated }) {
   const [posts, setPosts] = useState(null);
+  const [newPostMode, setNewPostMode] = useState(false);
   const [newPostMessage, setNewPostMessage] = useState('');
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function PostIndex({ currentUser, setCurrentUser, setAuthenticated }) {
     await createPost(newPost);
 
     setNewPostMessage('');
-    toggleDisplayNewPostForm();
+    setNewPostMode(false);
     refreshPosts();
   }
 
@@ -43,32 +44,27 @@ function PostIndex({ currentUser, setCurrentUser, setAuthenticated }) {
     });
   }
 
-  const toggleDisplayNewPostForm = () => {
-    const displayNewCommentContainer = document.querySelector(`#new-post-container`);
-    const addCommentBtn = document.querySelector(`#add-post-btn`);
-    
-    if (displayNewCommentContainer.style.display === 'none') {
-      displayNewCommentContainer.style.display = 'block'
-      addCommentBtn.style.display = 'none';
-    } else {
-      displayNewCommentContainer.style.display = 'none'
-      addCommentBtn.style.display = 'inline-block';
-    }
-  }
-
   return (
     <div>
       <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} />
 
       <div className="post-index-container">
-        <h1>Post Index</h1>
+        <header>
+          <h1>Your Feed</h1>
+          <button id={`add-post-btn`} onClick={() => setNewPostMode(true)}>Add Post</button>
+        </header>
 
-        <button id={`add-post-btn`} onClick={toggleDisplayNewPostForm}>Add Post</button>
-        <div id="new-post-container" style={{'display': 'none'}}>
-          <textarea placeholder="Share your thoughts..." value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)}></textarea>
-          <button onClick={handleSubmitPost}>Submit</button>
-          <button onClick={toggleDisplayNewPostForm}>Cancel</button>
-        </div>
+        {
+          newPostMode ?
+          <div className="new-post-container">
+            <textarea placeholder="Share your thoughts..." value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)}></textarea>
+            <div className="new-post-actions">
+              <button onClick={handleSubmitPost}>Submit</button>
+              <button onClick={() => setNewPostMode(false)}>Cancel</button>
+            </div>
+          </div> :
+          null
+        }
 
         {
           posts ?
