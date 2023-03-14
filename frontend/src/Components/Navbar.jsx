@@ -12,7 +12,7 @@ function Navbar({ currentUser, setCurrentUser, setAuthenticated }) {
 
   return (
     <nav>
-      <p>Odin-Book</p>
+      <p className="container-title">Odin-Book</p>
       <div>
         {
           currentUser ?

@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { getLoggedInUser, logIn } from '../api';
+
+import Navbar from './Navbar';
+
+import googleIcon from '../assets/icons/google.png';
 
 function LogInPage({ currentUser, setCurrentUser }) {
   const [email, setEmail] = useState('');
@@ -24,26 +26,30 @@ function LogInPage({ currentUser, setCurrentUser }) {
   }
 
   return (
-    <div className="log-in-container">
-      <p>Log In</p>
+    <div className="log-in-page">
+      <Navbar />
+      <div className="log-in-container">
 
-      {/* <div className="log-in-form">
-        <label htmlFor="email">
-          Email
-          <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-  
-        <label htmlFor="password">
-          Password
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <button onClick={handleLogIn}>Log In</button>
-      </div> */}
+        <p className="container-title">Log In</p>
 
-      <a href="http://localhost:8080/api/auth/google">Sign in with Google</a>
+        <div className="log-in-form">
+          <label htmlFor="email">Email</label>
+          <input type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+    
+          <label htmlFor="password">Password</label>
+          <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          
+          <button onClick={handleLogIn}>Log In</button>
+        </div>
+
+        <a href="http://localhost:8080/api/auth/google" className="google-sign-in-link">
+          <img src={googleIcon} alt="" />
+          Sign in with Google
+        </a>
+      </div>
 
       <Link to="/create-account">
-        <p>Create Account</p>
+        <p className="create-account-link">Create Account</p>
       </Link>
     </div>
   );
