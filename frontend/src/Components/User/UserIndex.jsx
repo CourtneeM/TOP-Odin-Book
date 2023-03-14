@@ -20,21 +20,24 @@ function UserIndex({ currentUser, setCurrentUser, setAuthenticated }) {
   return (
     <div>
       <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} />
-      {
-        currentUser ?
-        <>
-          <h1>User Index</h1>
 
-          {
-            users && users.length > 0 ?
-            users.map((user) => {
-              return <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
-            }) :
-            null
-          }
-        </> :
-        <p>Not authorized to view this page.</p>
-      }
+      <div className="user-index-container">
+        {
+          currentUser ?
+          <>
+            <h1>User Index</h1>
+
+            {
+              users && users.length > 0 ?
+              users.map((user) => {
+                return <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
+              }) :
+              null
+            }
+          </> :
+          <p>Not authorized to view this page.</p>
+        }
+      </div>
     </div>
   );
 }
