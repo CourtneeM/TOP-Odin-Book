@@ -42,7 +42,6 @@ function UserProfile({ currentUser, setCurrentUser, setAuthenticated }) {
             user ?
               <>
                 <section className="profile-header-container">
-                  <h1>User Profile</h1>
                   <UserCard user={user} currentUser={currentUser} refreshUsers={refreshUsers} />
                 </section>
                 <section className="user-posts-container">

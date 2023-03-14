@@ -270,4 +270,68 @@ nav div p {
   padding: 8px 10px;
 }
 
+.user-profile-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.user-info-card {
+  max-width: 600px;
+  max-height: 225px;
+  margin: 0 auto 40px;
+  padding: 40px 40px 0;
+  background-color: #ddd;
+  border-radius: 15px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.user-info-card .user-info-header {
+  display: flex;
+  flex-wrap: wrap;
+}
+.user-info-card .edit-profile-pic-container {
+  max-width: 150px;
+}
+.user-info-card .edit-profile-pic-container img {
+  width: 50px;
+  height: 50px;
+}
+.user-info-card .edit-profile-pic-container #selected-profile-picture {
+  border: 2px solid #000;
+}
+.user-info-card img {
+  width: 100px;
+  height: 100px;
+}
+.user-info-card .user-info {
+  flex-basis: 55%;
+  margin: 12px 0 50px 30px;
+  font-size: 18px;
+}
+.user-info-card .user-info p:first-child {
+  margin-bottom: 30px;
+}
+.user-info-card .user-info .edit-about-message {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  margin-bottom: -30px;
+}
+.user-info-card .user-actions {
+  align-self: flex-end;
+  width: fit-content;
+  margin: -13px -40px 0 auto;
+  background-color: #fff;
+  border-radius: 15px 0 15px 0;
+}
+.user-info-card .user-actions button {
+  background: none;
+  border: none;
+  padding: 13px 30px;
+  border-right: 1px solid #ddd;
+}
+.user-info-card .user-actions button:last-child {
+  border: none;
+}
+
 /*# sourceMappingURL=style.css.map */

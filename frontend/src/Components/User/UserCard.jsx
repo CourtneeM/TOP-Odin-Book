@@ -99,56 +99,47 @@ function UserCard({ user, currentUser, refreshUsers }) {
     setEditMode(false);
   }
 
-  const handleChangeProfilePicture = async (target) => {
-    const alternateProfilePictures = [...document.querySelectorAll('.alternate-profile-picture')];
-    alternateProfilePictures.forEach((image) => {
-      if (image.id === 'new-profile-picture') {
-        image.removeAttribute('id');
-        image.style.border = 'none';
-      }
-    });
-    
-    target.id = 'new-profile-picture';
-    target.style.border = '2px solid red';
-
-    setSelectedProfilePicture(target.src);
-  }
-
   return (
-    <div className={`user-info-card-${user.id}`}>
+    <div className={`user-info-card user-info-card-${user.id}`}>
       <section className="user-info-header">
         {
           user ?
           <>
             {
               editMode ?
-              user.profilePicture.images.map((image) => {
-                return selectedProfilePicture === image ?
-                <img src={selectedProfilePicture} alt="" id="selected-profile-picture" style={{'width': '32px', 'border': '2px solid #000'}} /> :
-                <img src={image} alt="" className="alternate-profile-picture" style={{'width': '32px'}} onClick={(e) => handleChangeProfilePicture(e.target)} />
-              }) :
-              <img src={selectedProfilePicture} alt="" id="selected-profile-picture" style={{'width': '32px'}} />
+              <div className="edit-profile-pic-container">
+                {
+                  user.profilePicture.images.map((image) => {
+                    return selectedProfilePicture === image ?
+                    <img src={selectedProfilePicture} alt="" id="selected-profile-picture" /> :
+                    <img src={image} alt="" className="alternate-profile-picture" onClick={(e) => setSelectedProfilePicture(e.target.src)} />
+                  }) 
+                }
+              </div> :
+              <img src={selectedProfilePicture} alt="" id="selected-profile-picture" />
             }
-            {
-              params.userId === user.id ?
-              <p>{user.firstName} {user.lastName}</p> :
-              <Link to={`${user.id}`}>
-                <p>{user.firstName} {user.lastName}</p>
-              </Link>
-            }
-            {
-              editMode ?
-              <>
-                <textarea value={aboutUser} onChange={(e) => setAboutUser(e.target.value)}></textarea>
-              </> :
-              <p>{aboutUser}</p>
-            }
+            <div className="user-info">
+              {
+                params.userId === user.id ?
+                <p>{user.firstName} {user.lastName}</p> :
+                <Link to={`${user.id}`}>
+                  <p>{user.firstName} {user.lastName}</p>
+                </Link>
+              }
+              {
+                editMode ?
+                <>
+                  <textarea className="edit-about-message" value={aboutUser} onChange={(e) => setAboutUser(e.target.value)}></textarea>
+                </> :
+                <p>{aboutUser}</p>
+              }
+            </div>
           </> :
-          <p>Loading...</p>
+            <p>Loading...</p>
         }
         {
           currentUser ?
-          <>
+          <div className="user-actions">
             {
               (currentUser.id === params.userId) && !editMode ?
               <button onClick={() => setEditMode(true)}>Edit Profile</button> :
@@ -163,27 +154,29 @@ function UserCard({ user, currentUser, refreshUsers }) {
               </> :
               null
             }
-          </> :
+          </div> :
           null
         }
       </section>
 
-      {
-        currentUser && (currentUser.id !== user.id) ?
-          !currentUser.friends.includes(user.id) ?
-            currentUser.friendRequests.sent.includes(user.id) ?
-            <button onClick={() => cancelFriendRequest(user)}>Cancel Friend Request</button> :
+      <div className="user-actions">
+        {
+          currentUser && (currentUser.id !== user.id) ?
+            !currentUser.friends.includes(user.id) ?
+              currentUser.friendRequests.sent.includes(user.id) ?
+              <button onClick={() => cancelFriendRequest(user)}>Cancel Friend Request</button> :
 
-            currentUser.friendRequests.received.includes(user.id) ?
-            <>
-              <button onClick={() => acceptFriendRequest(user)}>Accept Friend Request</button>
-              <button onClick={() => declineFriendRequest(user)}>Decline Friend Request</button>
-            </> :
+              currentUser.friendRequests.received.includes(user.id) ?
+              <>
+                <button onClick={() => acceptFriendRequest(user)}>Accept Friend Request</button>
+                <button onClick={() => declineFriendRequest(user)}>Decline Friend Request</button>
+              </> :
 
-            <button onClick={() => sendFriendRequest(user)}>Send Friend Request</button> :
-          <button onClick={() => removeFriend(user)}>Remove Friend</button> :
-        null
-      }
+              <button onClick={() => sendFriendRequest(user)}>Send Friend Request</button> :
+            <button onClick={() => removeFriend(user)}>Remove Friend</button> :
+          null
+        }
+      </div>
     </div>
   );
 }

@@ -304,3 +304,77 @@ nav {
     padding: 8px 10px;
   }
 }
+
+.user-profile-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+// USER CARD
+.user-info-card {
+  max-width: 600px;
+  max-height: 225px;
+  margin: 0 auto 40px;
+  padding: 40px 40px 0;
+  background-color: #ddd;
+  border-radius: 15px;
+  box-shadow: $container-shadow;
+
+  .user-info-header {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .edit-profile-pic-container {
+    max-width: 150px;
+    
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    #selected-profile-picture {
+      border: 2px solid #000;
+    }
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .user-info {
+    flex-basis: 55%;
+    margin: 12px 0 50px 30px;
+    font-size: 18px;
+
+    p:first-child {
+      margin-bottom: 30px;
+    }
+
+    .edit-about-message {
+      width: 100%;
+      padding: 8px 10px;
+      border: none;
+      margin-bottom: -30px;
+    }
+  }
+
+  .user-actions {
+    align-self: flex-end;
+    width: fit-content;
+    margin: -13px -40px 0 auto;
+    background-color: #fff;
+    border-radius: 15px 0 15px 0;
+
+    button {
+      background: none;
+      border: none;
+      padding: 13px 30px;
+      border-right: 1px solid #ddd;
+
+      &:last-child { border: none; }
+    }
+  }
+}
