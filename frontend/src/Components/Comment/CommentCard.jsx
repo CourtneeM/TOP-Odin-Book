@@ -67,61 +67,70 @@ function CommentCard({ comment, currentUser, refreshContent }) {
   }
 
   return (
-    <div>
+    <div className={`comment-card comment-card-${comment._id}`}>
       {
         params.userId ?
-        <p>{comment.author.first_name} {comment.author.last_name}</p> :
+        <p className="comment-author">{comment.author.first_name} {comment.author.last_name}</p> :
         <Link to={`/users/${comment.author._id}`}>
-          <p>{comment.author.first_name} {comment.author.last_name}</p>
+          <p className="comment-author">{comment.author.first_name} {comment.author.last_name}</p>
         </Link>
       }
-      <p>{comment.timestamp}</p>
+      <p className="comment-timestamp">{comment.timestamp}</p>
       {
         selectedComment && !editMode ?
-        <p className={`comment-${comment._id}-message`}>{selectedComment.message}</p> :
+        <p className={`comment-message comment-${comment._id}-message`}>{selectedComment.message}</p> :
           currentUser && editMode ?
-          <textarea className={`edit-comment-${comment._id}-message`} value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea> :
+          <textarea className={`edit-comment-message edit-comment-${comment._id}-message`} value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea> :
         <p>Loading comment...</p>
       }
 
-      {
-        comment.likes.length === 0 || comment.likes.length > 1 ?
-        <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Likes</p> :
-        <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Like</p>
-      }
+      <div className="comment-footer">
 
-      {
-        currentUser ?
-          <>
-            {
-              comment.likes.includes(currentUser.id) ?
-              <button onClick={toggleLike}>Unlike</button> :
-              <button onClick={toggleLike}>Like</button>
-            }
+        {
+          !editMode ?
+            comment.likes.length === 0 || comment.likes.length > 1 ?
+            <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Likes</p> :
+            <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Like</p> :
+          null
+        }
 
-            {
-              (currentUser.id === comment.author._id) && !editMode ?
-              <button onClick={() => setEditMode(true)}>Edit Comment</button> :
-              null
-            }
+        <div className="comment-actions">
+          {
+            currentUser ?
+            <>
+              {
+                !editMode ?
+                  comment.likes.includes(currentUser.id) ?
+                  <button onClick={toggleLike}>Unlike</button> :
+                  <button onClick={toggleLike}>Like</button> :
+                null
+              }
 
-            {
-              (currentUser.id === comment.author._id) && editMode ?
-              <>
-                <button onClick={handleEditComment}>Save</button>
-                <button onClick={handleCancelEditComment}>Cancel Edit</button>
-              </> :
-              null
-            }
+              {
+                (currentUser.id === comment.author._id) && !editMode ?
+                <button onClick={() => setEditMode(true)}>Edit Comment</button> :
+                null
+              }
 
-            {
-              (currentUser.id === comment.author._id) && editMode ?
-              <button onClick={handleDeleteComment}>Delete Comment</button> :
-              null
-            }
-          </> :
-        null
-      }
+              {
+                (currentUser.id === comment.author._id) && editMode ?
+                <>
+                  <button onClick={handleEditComment}>Save</button>
+                  <button onClick={handleCancelEditComment}>Cancel Edit</button>
+                </> :
+                null
+              }
+
+              {
+                (currentUser.id === comment.author._id) && editMode ?
+                <button onClick={handleDeleteComment}>Delete Comment</button> :
+                null
+              }
+            </> :
+            null
+          }
+        </div>
+      </div>
 
       <div id={`display-who-likes-${comment._id}-container`} style={{'display': 'none'}}>
         <p>Users who liked this comment:</p>

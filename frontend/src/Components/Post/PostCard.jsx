@@ -8,6 +8,7 @@ function PostCard({ post, currentUser, refreshContent }) {
   const [selectedPost, setSelectedPost] = useState(null);
   const [newPostMessage, setNewPostMessage] = useState('');
   const [editMode, setEditMode] = useState(false);
+  const [newCommentMode, setNewCommentMode] = useState(false);
   const [users, setUsers] = useState(null);
   const [comments, setComments] = useState(null);
   const [commentsPreview, setCommentsPreview] = useState(true);
@@ -49,7 +50,7 @@ function PostCard({ post, currentUser, refreshContent }) {
     await createComment(newComment);
 
     setNewCommentMessage('');
-    toggleDisplayNewCommentForm();
+    setNewCommentMode(false);
     refreshPost();
   }
 
@@ -100,110 +101,117 @@ function PostCard({ post, currentUser, refreshContent }) {
     displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
   }
 
-  const toggleDisplayNewCommentForm = () => {
-    const displayNewCommentContainer = document.querySelector(`#new-comment-container-${post._id}`);
-    const addCommentBtn = document.querySelector(`#add-comment-btn-${post._id}`);
-    
-    if (displayNewCommentContainer.style.display === 'none') {
-      displayNewCommentContainer.style.display = 'block'
-      addCommentBtn.style.display = 'none';
-    } else {
-      displayNewCommentContainer.style.display = 'none'
-      addCommentBtn.style.display = 'inline-block';
-    }
-  }
-
   return (
-    <div className={`post-card-${post._id}`}>
-      {
-        params.userId ?
-        <p>{post.author.first_name} {post.author.last_name}</p> :
-        <Link to={`/users/${post.author._id}`}>
-          <p>{post.author.first_name} {post.author.last_name}</p>
-        </Link>
-      }
-      <p>{post.timestamp}</p>
+    <div className={`post-card post-card-${post._id}`}>
+      <div className="post-section">
 
-      {
-        selectedPost && !editMode ?
-        <p className={`post-${post._id}-message`}>{selectedPost.message}</p> :
-          currentUser && editMode ?
-          <textarea className={`edit-post-${post._id}-message`} value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)}></textarea> :
-        <p>Loading message...</p>
-      }
-
-      {
-        post.likes.length === 0 || post.likes.length > 1 ?
-        <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Likes</p> :
-        <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Like</p>
-      }
-      {
-        comments ?
-          comments.length === 0 || comments.length > 1 ?
-          <p>{comments.length} Comments</p> :
-          <p>{comments.length} Comment</p> :
-        null
-      }
-      {
-        currentUser ?
-          post.likes.includes(currentUser.id) ? 
-          <button onClick={toggleLike}>Unlike</button> :
-          <button onClick={toggleLike}>Like</button> :
-        null
-      }
-
-      <div id={`who-likes-${post._id}-container`} style={{'display': 'none'}}>
-        <p>Users who liked this post:</p>
         {
-          users && post.likes.map((userId) => {
-            const userList = users.filter((user) => user.id === userId)
-            return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
-          })
+          params.userId ?
+          <p className="post-author">{post.author.first_name} {post.author.last_name}</p> :
+          <Link to={`/users/${post.author._id}`}>
+            <p className="post-author">{post.author.first_name} {post.author.last_name}</p>
+          </Link>
         }
-      </div>
+        <p className="post-timestamp">{post.timestamp}</p>
 
-      {
-        currentUser ?
-        <button id={`add-comment-btn-${post._id}`} onClick={toggleDisplayNewCommentForm}>Add Comment</button> :
-        null
-      }
-      <div id={`new-comment-container-${post._id}`} style={{'display': 'none'}}>
-        <textarea placeholder="Share your thoughts..." value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea>
-        <button onClick={handleSubmitComment}>Submit</button>
-        <button onClick={toggleDisplayNewCommentForm}>Cancel</button>
-      </div>
+        {
+          selectedPost && !editMode ?
+          <p className={`post-message post-${post._id}-message`}>{selectedPost.message}</p> :
+            currentUser && editMode ?
+            <textarea className={`edit-post-message edit-post-${post._id}-message`} value={newPostMessage} onChange={(e) => setNewPostMessage(e.target.value)}></textarea> :
+          <p>Loading message...</p>
+        }
 
-      {
-        currentUser ?
-        <>
+        <div className="post-footer">
           {
-            (currentUser.id === post.author._id) && !editMode ?
-            <button onClick={() => setEditMode(true)}>Edit Post</button> :
-            null
-          }
-
-          {
-            editMode ?
-            <>
-              <button onClick={handleEditPost}>Save</button>
-              <button onClick={handleCancelEditPost}>Cancel Edit</button>
+            !editMode ?
+            <> 
+              {
+                post.likes.length === 0 || post.likes.length > 1 ?
+                <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Likes</p> :
+                <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Like</p>
+              }
+              {
+                comments ?
+                  comments.length === 0 || comments.length > 1 ?
+                  <p>{comments.length} Comments</p> :
+                  <p>{comments.length} Comment</p> :
+                null
+              }
             </> :
             null
           }
 
-          {
-            (currentUser.id === post.author._id) && editMode ?
-            <button onClick={handleDeletePost}>Delete Post</button> :
-            null
-          }
-        </> :
+          <div id={`who-likes-${post._id}-container`} style={{'display': 'none'}}>
+            <p>Users who liked this post:</p>
+            {
+              users && post.likes.map((userId) => {
+                const userList = users.filter((user) => user.id === userId)
+                return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
+              })
+            }
+          </div>
+
+          <div className="post-actions">
+            {
+              currentUser && !editMode ?
+                post.likes.includes(currentUser.id) ? 
+                <button onClick={toggleLike}>Unlike</button> :
+                <button onClick={toggleLike}>Like</button> :
+              null
+            }
+
+            {
+              currentUser && !editMode && !newCommentMode   ?
+              <button id={`add-comment-btn-${post._id}`} onClick={() => setNewCommentMode(true)}>Comment</button> :
+              null
+            }
+
+            {
+              currentUser ?
+              <>
+                {
+                  (currentUser.id === post.author._id) && !editMode ?
+                  <button onClick={() => setEditMode(true)}>Edit Post</button> :
+                  null
+                }
+
+                {
+                  editMode ?
+                  <>
+                    <button onClick={handleEditPost}>Save</button>
+                    <button onClick={handleCancelEditPost}>Cancel Edit</button>
+                  </> :
+                  null
+                }
+
+                {
+                  (currentUser.id === post.author._id) && editMode ?
+                  <button onClick={handleDeletePost}>Delete Post</button> :
+                  null
+                }
+              </> :
+              null
+            }
+          </div>
+        </div>
+      </div>
+
+      {
+        currentUser && newCommentMode ?
+        <div className={`new-comment-container new-comment-container-${post._id}`}>
+          <textarea className="new-comment-message" placeholder="Share your thoughts..." value={newCommentMessage} onChange={(e) => setNewCommentMessage(e.target.value)}></textarea>
+          <div className="new-comment-actions">
+            <button onClick={handleSubmitComment}>Submit</button>
+            <button onClick={() => setNewCommentMode(false)}>Cancel</button>
+          </div>
+        </div> :
         null
       }
 
       {
         commentsPreview ?
         <>
-          <h3>Comments</h3>
           {
             comments?.slice(0, numCommentsToLoad).map((comment) => <CommentCard comment={comment} currentUser={currentUser} refreshContent={refreshPost} />)
           }
