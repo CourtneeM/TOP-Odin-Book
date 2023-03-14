@@ -26,11 +26,32 @@ a {
 
 // NAVBAR
 nav {
+  display: flex;
+  justify-content: space-between;
   padding: 15px 30px;
   box-shadow: $container-shadow;
+
+  button {
+    padding: 8px 20px;
+    text-align: center;
+    background-color: #ddd;
+    border: none;
+    border-radius: 8px;
+    box-shadow: $btn-shadow;
+    cursor: pointer;
+  }
   
   .container-title {
     font-size: 32px;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-right: 50px;
+    }
   }
 }
 
