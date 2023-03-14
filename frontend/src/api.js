@@ -41,7 +41,12 @@ const getLoggedInUser = async (setCurrentUser, setAuthenticated) => {
     credentials: 'include',
   });
   const data = await response.json();
-  if (!data) return;
+
+  if (!data) {
+    localStorage.setItem('userId', null);
+    setAuthenticated(false);
+    return;
+  }
 
   if (localStorage.getItem('userId') === 'null') localStorage.setItem('userId', data._id);
 
