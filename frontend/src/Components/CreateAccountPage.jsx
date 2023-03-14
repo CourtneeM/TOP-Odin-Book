@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 
 import { createUser, logIn, getLoggedInUser } from '../api';
+import Navbar from "./Navbar";
 
 function CreateAccountPage({ currentUser, setCurrentUser }) {
   const [firstName, setFirstName] = useState('');
@@ -35,36 +36,34 @@ function CreateAccountPage({ currentUser, setCurrentUser }) {
   }
 
   return (
-    <div className="log-in-container">
-      <p>Log In</p>
+    <div className="create-account-page">
+      <Navbar />
 
-      <div className="log-in-form">
-        <label htmlFor="first-name">
-          First Name
-          <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-        </label>
-        <label htmlFor="first-name">
-          Last Name
-          <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-        </label>
-        <label htmlFor="email">
-          Email
-          <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-  
-        <label htmlFor="password">
-          Password
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <label htmlFor="confirm-password">
-          Confirm Password
-          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-        </label>
-        <button onClick={handleCreateAccount}>Log In</button>
+      <div className="create-account-container">
+        <p className="container-title">Create Account</p>
+
+        <div className="create-account-form">
+          <label htmlFor="first-name">First Name</label>
+          <input type="text" id="first-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          
+          <label htmlFor="last-name">Last Name</label>
+          <input type="text" id="last-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+          
+          <label htmlFor="email">Email</label>
+          <input type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          
+          <label htmlFor="password">Password</label>
+          <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          
+          <label htmlFor="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          
+          <button onClick={handleCreateAccount}>Create Account</button>
+        </div>
       </div>
 
       <Link to="/">
-        <p>Have an account? Log In</p>
+        <p className="log-in-link">Have an account? Log In</p>
       </Link>
     </div>
   );

@@ -19,24 +19,26 @@ a {
   text-decoration: none;
 }
 
-nav .container-title {
+nav {
   padding: 15px 30px;
-  font-size: 32px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
+nav .container-title {
+  font-size: 32px;
+}
 
-.log-in-page {
+.log-in-page, .create-account-page {
   padding-bottom: 50px;
 }
-.log-in-page nav div {
+.log-in-page nav div, .create-account-page nav div {
   display: none;
 }
-.log-in-page .create-account-link {
+.log-in-page .create-account-link, .log-in-page .log-in-link, .create-account-page .create-account-link, .create-account-page .log-in-link {
   display: block;
   text-align: center;
 }
 
-.log-in-container {
+.log-in-container, .create-account-container {
   max-width: 400px;
   margin: 100px auto 50px;
   padding: 40px 50px 60px;
@@ -44,25 +46,24 @@ nav .container-title {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
 }
-.log-in-container .container-title {
+.log-in-container .container-title, .create-account-container .container-title {
   margin-bottom: 55px;
   font-size: 24px;
 }
-.log-in-container .log-in-form {
+.log-in-container .log-in-form, .log-in-container .create-account-form, .create-account-container .log-in-form, .create-account-container .create-account-form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 80px;
   font-size: 20px;
 }
-.log-in-container .log-in-form label {
+.log-in-container .log-in-form label, .log-in-container .create-account-form label, .create-account-container .log-in-form label, .create-account-container .create-account-form label {
   margin-bottom: 8px;
 }
-.log-in-container .log-in-form input {
+.log-in-container .log-in-form input, .log-in-container .create-account-form input, .create-account-container .log-in-form input, .create-account-container .create-account-form input {
   margin-bottom: 20px;
   padding: 8px 10px;
   border: none;
 }
-.log-in-container .log-in-form button {
+.log-in-container .log-in-form button, .log-in-container .create-account-form button, .create-account-container .log-in-form button, .create-account-container .create-account-form button {
   margin-top: 20px;
   padding: 15px 60px;
   font-size: 16px;
@@ -73,9 +74,10 @@ nav .container-title {
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
-.log-in-container .google-sign-in-link {
+.log-in-container .google-sign-in-link, .create-account-container .google-sign-in-link {
   display: flex;
   align-items: center;
+  margin-top: 80px;
   padding: 15px 60px;
   text-align: center;
   background-color: #fff;
@@ -83,7 +85,7 @@ nav .container-title {
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
-.log-in-container .google-sign-in-link img {
+.log-in-container .google-sign-in-link img, .create-account-container .google-sign-in-link img {
   width: 24px;
   height: 24px;
   margin-right: 10px;
