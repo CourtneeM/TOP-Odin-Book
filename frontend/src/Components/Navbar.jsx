@@ -12,12 +12,16 @@ function Navbar({ currentUser, setCurrentUser, setAuthenticated }) {
 
   return (
     <nav>
-      <p className="container-title">Odin-Book</p>
+      <Link to="/index">
+        <p className="container-title">Odin-Book</p>
+      </Link>
       <div>
         {
           currentUser ?
           <div>
-            <p>{currentUser.firstName} {currentUser.lastName}</p>
+            <Link to={`/users/${currentUser.id}`}>
+              <p>{currentUser.firstName} {currentUser.lastName}</p>
+            </Link>
             <button onClick={handleLogOut}>Log Out</button>
           </div> :
           <Link to="/">

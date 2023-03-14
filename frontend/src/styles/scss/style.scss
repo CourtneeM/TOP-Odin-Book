@@ -289,6 +289,7 @@ nav {
   max-width: 550px;
   padding: 20px 40px 0;
   background-color: #ddd;
+  border-bottom: 2px solid #fff;
   border-radius: 0 0 15px 15px;
   box-shadow: $container-shadow;
 
@@ -337,7 +338,12 @@ nav {
 
   .comment-card {
     max-width: 600px;
+    margin-bottom: 20px;
     border-radius: 15px;
+  }
+
+  .no-content-message {
+    margin-bottom: 40px;
   }
 }
 

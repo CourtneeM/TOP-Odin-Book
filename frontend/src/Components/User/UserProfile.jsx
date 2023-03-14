@@ -49,7 +49,7 @@ function UserProfile({ currentUser, setCurrentUser, setAuthenticated }) {
                   {
                     userPosts && userPosts.length > 0 ?
                     userPosts.map((post) => <PostCard post={post} currentUser={currentUser} refreshContent={refreshContent} />) :
-                    <p>No Posts</p>
+                    <p className="no-content-message">No Posts</p>
                   }
                 </section>
                 <section className="user-comments-container">
@@ -57,7 +57,7 @@ function UserProfile({ currentUser, setCurrentUser, setAuthenticated }) {
                   {
                     userComments && userComments.length > 0 ?
                     userComments.map((comment) => <CommentCard comment={comment} currentUser={currentUser} refreshContent={refreshContent} />) :
-                    <p>No Comments</p>
+                    <p className="no-content-message">No Comments</p>
                   }
                 </section>
               </> :
