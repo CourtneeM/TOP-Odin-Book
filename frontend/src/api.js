@@ -112,7 +112,7 @@ const getUserContent = async (userId) => {
   return data;
 }
 
-const createUser = async (user) => {
+const createUser = async (user, setNewUser, setErrorMessages) => {
   await fetch('http://localhost:8080/api/users/create', {
     method: 'POST',
     headers: {
@@ -128,7 +128,24 @@ const createUser = async (user) => {
     })
   }).then((res) => {
     return res.json();
-  }).then((data) => {
+  }).then(async (data) => {
+    if (data._id) {
+      const userInfo = {
+        id: data._id,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        email: data.email,
+        friends: data.friends,
+        friendRequests: data.friend_requests,
+        profilePicture: data.profile_picture,
+        about: data.about,
+      }
+
+      await setNewUser(userInfo);
+      return;
+    }
+
+    if (data.first_name || data.last_name || data.email || data.password || data.confirm_password) setErrorMessages(data);
     console.log('Success: ', data);
   }).catch((err) => {
     console.log('Error: ', err);

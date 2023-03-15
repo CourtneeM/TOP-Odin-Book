@@ -111,13 +111,15 @@ exports.create_user_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
+  body("email", "Email is invalid")
+    .trim()
+    .isEmail(),
   body("email", "Email must not be empty.")
     .trim()
     .isLength({ min: 1 })
     .escape(),
   body("email")
     .trim()
-    .isEmail()
     .custom((val, {req}) => {
       return new Promise((res, rej) => {
         User.findOne({email: req.body.email}, function(err, user) {
@@ -165,29 +167,21 @@ exports.create_user_post = [
       });
 
       if (!errors.isEmpty()) {
-        // There are errors. Render form again with sanitized values/error messages.
-  
-        User.find({})
-          .exec((err, users) => {
-
-            if (err) return next(err);
-          });
-
         const errorMessages = {}
         errors.errors.forEach((error) => errorMessages[error.param] = error.msg);
         res.json(errorMessages);
 
         return;
+      } else {
+        // Data from form is valid. Save user.
+        user.save((err) => {
+          if (err) {
+            return next(err);
+          }
+
+          res.json(user);
+        });
       }
-
-      // Data from form is valid. Save user.
-      user.save((err) => {
-        if (err) {
-          return next(err);
-        }
-
-        res.json(`user: ${user}`);
-      });
     } catch (err) {
       res.json(`error: ${err}`);
     }

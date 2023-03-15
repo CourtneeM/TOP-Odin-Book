@@ -10,8 +10,6 @@ function LogInPage({ currentUser, setCurrentUser, setAuthenticated }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessages, setErrorMessages] = useState(null);
-  // const [displayEmailError, setDisplayEmailError] = useState(false);
-  // const [displayPasswordError, setDisplayPasswordError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,7 +23,7 @@ function LogInPage({ currentUser, setCurrentUser, setAuthenticated }) {
 
     await logIn(email, password, setErrorMessages);
 
-    if (errorMessages?.length > 0) return;
+    if (Object.values(errorMessages).length > 0) return;
 
     await getLoggedInUser(setCurrentUser, setAuthenticated);
   }
