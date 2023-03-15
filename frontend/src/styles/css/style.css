@@ -19,6 +19,13 @@ a {
   text-decoration: none;
 }
 
+.error-message {
+  margin-top: -10px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: red;
+}
+
 nav {
   display: flex;
   justify-content: space-between;

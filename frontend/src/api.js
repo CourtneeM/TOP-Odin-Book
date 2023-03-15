@@ -1,4 +1,4 @@
-const logIn = async (email, password) => {
+const logIn = async (email, password, setErrorMessages) => {
   await fetch('http://localhost:8080/api/log-in', {
     method: 'POST',
     headers: {
@@ -13,7 +13,8 @@ const logIn = async (email, password) => {
   }).then((res) => {
     return res.json();
   }).then((data) => {
-    console.log(data);
+    if (!data) return setErrorMessages({user: 'Incorrect email or password'});
+    if (data.email || data.password) return setErrorMessages(data);
     console.log('Success: ', data);
   }).catch((err) => {
     console.log('Error: ', err);

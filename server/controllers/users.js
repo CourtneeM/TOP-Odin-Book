@@ -22,19 +22,41 @@ exports.auth_google_redirect = passport.authenticate('google',
   }
 );
 
-exports.log_in_post = async (req, res, next) => {
-  await passport.authenticate("local", (err, user, info) => {
-    if (err) throw err;
-    if (!user) {
-      res.json("No user exists");
-    } else {
-      req.logIn(user, err => {
-        if (err) throw err;
-        res.json(user);
-      })
-    }
-  })(req, res, next);
-}
+exports.log_in_post = [
+  // Validate and sanitize fields.
+  body("username", "Email must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("password", "Password must not be empty.")
+  .trim()
+  .isLength({ min: 1 })
+  .escape(),
+
+  async (req, res, next) => {
+    await passport.authenticate("local", (err, user, info) => {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        const errorMessages = {}
+        errors.errors.forEach((error) => errorMessages[error.param] = error.msg);
+        res.json(errorMessages);
+
+        return;
+      }
+
+      if (err) throw err;
+      if (!user) {
+        res.json(null);
+      } else {
+        req.logIn(user, err => {
+          if (err) throw err;
+          res.json(user);
+        })
+      }
+    })(req, res, next)
+  }
+]
 
 exports.log_out_post = (req, res) => {
   req.logout((err) => {
