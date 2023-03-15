@@ -1,7 +1,5 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
-const async = require('async');
-const jwt = require('jsonwebtoken');
 
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();

@@ -21,8 +21,8 @@ function RouteSwitch() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={!authenticated ? <LogInPage currentUser={currentUser} setCurrentUser={setCurrentUser}/> : <Navigate to="/index" />} />
-        <Route path="/create-account" element={!authenticated ? <CreateAccountPage currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Navigate to="/index" />} />
+        <Route path="/" element={!authenticated ? <LogInPage currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} /> : <Navigate to="/index" />} />
+        <Route path="/create-account" element={!authenticated ? <CreateAccountPage currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} /> : <Navigate to="/index" />} />
         <Route path="/index" element={authenticated ? <PostIndex currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} /> : <Navigate to="/" />} />
         <Route path="/users" element={authenticated ? <UserIndex currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} /> : <Navigate to="/" />} />
         <Route path="/users/:userId" element={authenticated ? <UserProfile currentUser={currentUser} setCurrentUser={setCurrentUser} setAuthenticated={setAuthenticated} /> : <Navigate to="/" />} />

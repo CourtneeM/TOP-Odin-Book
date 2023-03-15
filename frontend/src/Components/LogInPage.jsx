@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 
 import googleIcon from '../assets/icons/google.png';
 
-function LogInPage({ currentUser, setCurrentUser }) {
+function LogInPage({ currentUser, setCurrentUser, setAuthenticated }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +20,7 @@ function LogInPage({ currentUser, setCurrentUser }) {
     if (!email || !password) return;
 
     await logIn(email, password);
-    // await getLoggedInUser(setCurrentUser);
+    await getLoggedInUser(setCurrentUser, setAuthenticated);
     setEmail('');
     setPassword('');
   }

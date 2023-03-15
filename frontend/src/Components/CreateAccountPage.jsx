@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { createUser, logIn, getLoggedInUser } from '../api';
 import Navbar from "./Navbar";
 
-function CreateAccountPage({ currentUser, setCurrentUser }) {
+function CreateAccountPage({ currentUser, setCurrentUser, setAuthenticated }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ function CreateAccountPage({ currentUser, setCurrentUser }) {
 
     await createUser(newUser);
     await logIn(email, password);
-    // await getLoggedInUser(setCurrentUser);
+    await getLoggedInUser(setCurrentUser, setAuthenticated);
 
     setFirstName('');
     setLastName('');
