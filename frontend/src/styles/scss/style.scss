@@ -204,7 +204,12 @@ nav {
     margin-bottom: 5px;
   }
 
+  .likes-message {
+    cursor: pointer;
+  }
+
   .post-footer, .comment-footer {
+    position: relative;
     display: flex;
     justify-content: space-between;
     gap: 50px;
@@ -311,6 +316,35 @@ nav {
     height: 45px;
     padding: 8px 10px;
     border: none;
+  }
+}
+
+// LIKES CARD
+.who-likes-container {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  z-index: 99;
+  min-width: 240px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: $container-shadow;
+
+  .container-title {
+    margin-bottom: 20px;
+  }
+
+  ul {
+    margin-left: 20px;
+  }
+
+  .close-who-likes-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
   }
 }
 

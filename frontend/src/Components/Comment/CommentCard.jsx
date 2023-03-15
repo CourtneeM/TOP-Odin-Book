@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { getUsers, getComment, editComment, deleteComment } from '../../api';
+import LikeCard from '../Likes/LikeCard';
 
 function CommentCard({ comment, currentUser, refreshContent }) {
   const [selectedComment, setSelectedComment] = useState(null);
@@ -61,9 +62,11 @@ function CommentCard({ comment, currentUser, refreshContent }) {
   }
 
   const toggleDisplayWhoLikes = () => {
-    const displayWhoLikesContainer = document.querySelector(`#display-who-likes-${comment._id}-container`);
+    const displayWhoLikesContainer = document.querySelector(`#who-likes-${comment._id}-container`);
     
-    displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
+    displayWhoLikesContainer.classList.contains('hidden') ?
+    displayWhoLikesContainer.classList.remove('hidden') :
+    displayWhoLikesContainer.classList.add('hidden');
   }
 
   return (
@@ -89,10 +92,12 @@ function CommentCard({ comment, currentUser, refreshContent }) {
         {
           !editMode ?
             comment.likes.length === 0 || comment.likes.length > 1 ?
-            <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Likes</p> :
-            <p onClick={toggleDisplayWhoLikes}>{comment.likes.length} Like</p> :
+            <p className="likes-message" onClick={toggleDisplayWhoLikes}>{comment.likes.length} Likes</p> :
+            <p className="likes-message" onClick={toggleDisplayWhoLikes}>{comment.likes.length} Like</p> :
           null
         }
+
+        <LikeCard content={comment} users={users} />
 
         <div className="comment-actions">
           {
@@ -130,16 +135,6 @@ function CommentCard({ comment, currentUser, refreshContent }) {
             null
           }
         </div>
-      </div>
-
-      <div id={`display-who-likes-${comment._id}-container`} style={{'display': 'none'}}>
-        <p>Users who liked this comment:</p>
-        {
-          users && comment.likes.map((userId) => {
-            const userList = users.filter((user) => user.id === userId)
-            return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
-          })
-        }
       </div>
     </div>
   );

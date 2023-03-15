@@ -174,7 +174,11 @@ nav div p {
 .post-card .post-author, .post-card .comment-author, .comment-card .post-author, .comment-card .comment-author {
   margin-bottom: 5px;
 }
+.post-card .likes-message, .comment-card .likes-message {
+  cursor: pointer;
+}
 .post-card .post-footer, .post-card .comment-footer, .comment-card .post-footer, .comment-card .comment-footer {
+  position: relative;
   display: flex;
   justify-content: space-between;
   gap: 50px;
@@ -277,6 +281,31 @@ nav div p {
   height: 45px;
   padding: 8px 10px;
   border: none;
+}
+
+.who-likes-container {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  z-index: 99;
+  min-width: 240px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.who-likes-container .container-title {
+  margin-bottom: 20px;
+}
+.who-likes-container ul {
+  margin-left: 20px;
+}
+.who-likes-container .close-who-likes-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
 
 .user-index-container {

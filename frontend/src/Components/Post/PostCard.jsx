@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getUsers, getPost, editPost, deletePost, getComments, createComment } from '../../api';
 
 import CommentCard from '../Comment/CommentCard';
+import LikeCard from '../Likes/LikeCard';
 
 function PostCard({ post, currentUser, refreshContent }) {
   const [selectedPost, setSelectedPost] = useState(null);
@@ -98,7 +99,9 @@ function PostCard({ post, currentUser, refreshContent }) {
   const toggleDisplayWhoLikes = () => {
     const displayWhoLikesContainer = document.querySelector(`#who-likes-${post._id}-container`);
     
-    displayWhoLikesContainer.style.display = displayWhoLikesContainer.style.display === 'none' ? 'block' : 'none';
+    displayWhoLikesContainer.classList.contains('hidden') ?
+    displayWhoLikesContainer.classList.remove('hidden') :
+    displayWhoLikesContainer.classList.add('hidden');
   }
 
   return (
@@ -128,8 +131,8 @@ function PostCard({ post, currentUser, refreshContent }) {
             <> 
               {
                 post.likes.length === 0 || post.likes.length > 1 ?
-                <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Likes</p> :
-                <p onClick={toggleDisplayWhoLikes}>{post.likes.length} Like</p>
+                <p className="likes-message" onClick={toggleDisplayWhoLikes}>{post.likes.length} Likes</p> :
+                <p className="likes-message" onClick={toggleDisplayWhoLikes}>{post.likes.length} Like</p>
               }
               {
                 comments ?
@@ -142,15 +145,7 @@ function PostCard({ post, currentUser, refreshContent }) {
             null
           }
 
-          <div id={`who-likes-${post._id}-container`} style={{'display': 'none'}}>
-            <p>Users who liked this post:</p>
-            {
-              users && post.likes.map((userId) => {
-                const userList = users.filter((user) => user.id === userId)
-                return userList.map((user) => <p>{user.firstName} {user.lastName}</p>)
-              })
-            }
-          </div>
+          <LikeCard content={post} users={users} />
 
           <div className="post-actions">
             {
